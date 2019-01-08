@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 var gulp = require('gulp'),
@@ -18,8 +18,9 @@ var gulp = require('gulp'),
 var input = {
     js: [
         //"Assets/js/polyfill.js",
-        //"Assets/lib/jquery/dist/jquery.js",
-        //"Assets/lib/bootstrap/dist/js/bootstrap.js",
+        "node_modules/jquery/dist/jquery.js",
+        "node_modules/popper.js/dist/umd/popper.js",
+        "node_modules/bootstrap/dist/js/bootstrap.js",
         //"Assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
         "Assets/lib/moment/min/moment.min.js",
         //"Assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
@@ -38,7 +39,7 @@ var input = {
     ],
     signaljs: [
         "node_modules/@aspnet/signalr/dist/browser/signalr.min.js"
-    ],    
+    ],
 };
 var output = {
     js: "Assets/output/js/script.js",
