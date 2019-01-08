@@ -1,5 +1,7 @@
 ﻿@model string
 @{
+    var module = Piranha.App.Modules.Get<Piranha.Manager.Module>();
+
 	Layout = null;
 }
 
@@ -11,25 +13,27 @@
 
 	<title>Login</title>
 
-    <link href="//fonts.googleapis.com/css?family=Gentium+Book+Basic:700" rel="stylesheet"> 
-    <link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
-    <link href="~/manager/assets/css/style.min.css" rel="stylesheet" type="text/css" />
-    <link type="image/x-icon" rel="icon" href="~/manager/assets/img/icon.ico">
-    <link type="image/x-icon" rel="shortcut icon" href="~/manager/assets/img/icon.ico">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <link rel="stylesheet" href="~/manager/assets/css/style.min.css">
+    @foreach (var style in module.Styles)
+    {
+        <link href="@Url.Content(style)" rel="stylesheet" type="text/css" />
+    }
 </head>
 <body id="login">
 	<div class="container">
         @using (var form = Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "main-form", @class = "form", @role = "form" })) {
-			<div class="panel panel-white">
+			<div class="card card-white">
 				@Html.AntiForgeryToken()
-				<div class="panel-body">
+				<div class="card-body">
 					<div class="account-logo"></div>
 					<p class="account-banner">
 						Piranha CMS
 						<small>Version 5.3.1</small>
 					</p>
 				</div>
-				<div class="panel-body">
+				<div class="card-body">
 					@if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
 						<div class="alert alert-danger" role="alert">
 							@Html.Raw(ViewBag.Message)

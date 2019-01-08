@@ -1,0 +1,61 @@
+@import "colors";
+
+#login {
+	margin: 0;
+	max-width: none;
+
+	.container {
+		max-width: 360px;
+		min-width: 300px;
+		margin: 80px auto 0;
+		text-align: center;
+		padding: 10px;
+
+		input {
+            background: #eee;
+			padding: 10px 12px;
+			border: 0 none;
+			text-align: center;
+		}
+
+		.btn {
+			width: 100%;
+			padding: 10px 20px;
+		}
+
+		.card.card-white {
+			box-shadow: 1px 2px 1px rgba(0,0,0,.1);
+			padding: 0;
+
+			.card-body {
+				padding: 35px;
+
+				&:first-child {
+					background: #116d9a url("../img/seigaiha-overlay.png");
+					padding-bottom: 10px;
+				}
+			}
+
+			.account-banner {
+				color: #fff;
+				margin-bottom: 20px;
+				font: 300 32px "Open Sans", Arial;
+				text-transform: uppercase;
+
+				small {
+					color: #abc;
+					display: block;
+					font-size: 12px;
+					font-weight: normal;
+					text-transform: none;
+				}
+			}
+
+			.account-logo {
+				background: url('../img/logo.png') 50% 0 no-repeat;
+				height: 155px;
+				margin-bottom: 20px;
+			}
+		}
+	}
+}
