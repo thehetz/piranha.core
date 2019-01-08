@@ -3,13 +3,12 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Session;
@@ -27,14 +26,6 @@ public static class ManagerModuleExtensions
     /// <param name="services">The current service collection</param>
     /// <returns>The services</returns>
     public static IServiceCollection AddPiranhaManager(this IServiceCollection services) {
-        var assembly = typeof(ManagerModuleExtensions).GetTypeInfo().Assembly;
-        var provider = new EmbeddedFileProvider(assembly, "Piranha");
-
-        // Add the file provider to the Razor view engine
-        services.Configure<RazorViewEngineOptions>(options => {
-            options.FileProviders.Add(provider);
-        });
-
         // Add the manager module
         Piranha.App.Modules.Register<Piranha.Manager.Module>();
 
@@ -223,7 +214,7 @@ public static class ManagerModuleExtensions
         return builder
             .UseSession()
             //.UseMiddleware<Piranha.Manager.ResourceMiddleware>()
-            .UseSignalR(routes => 
+            .UseSignalR(routes =>
             {
                 routes.MapHub<PreviewHub>("/manager/preview");
             });
