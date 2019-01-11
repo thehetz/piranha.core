@@ -59,55 +59,56 @@
     </script>
 }
 
-<div class="top-nav">
-    <nav>
-        <ul class="navbar-nav">
-            @if (Model.Sites.Count > 1)
-            {
-                <li>
-                    <div class="btn-group" role="group">
-                        <button id="btnSites" type="button" class="btn btn-sm btn-labeled btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-globe"></i>@Model.SiteTitle
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnSites">
-                            @foreach (var site in Model.Sites)
-                            {
-                                <a class="dropdown-item btn-panel-region" href="@Url.Action("ListSite", new { siteId = site.Id })">@site.Title</a>
-                            }
+<div class="top">
+    <div class="top-nav">
+        <nav>
+            <ul class="navbar-nav">
+                @if (Model.Sites.Count > 1)
+                {
+                    <li>
+                        <div class="btn-group" role="group">
+                            <button id="btnSites" type="button" class="btn btn-sm btn-labeled btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-globe"></i>@Model.SiteTitle
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnSites">
+                                @foreach (var site in Model.Sites)
+                                {
+                                    <a class="dropdown-item btn-panel-region" href="@Url.Action("ListSite", new { siteId = site.Id })">@site.Title</a>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </li>
-            }
-            @if (Model.HasSiteContent)
-            {
-                <li><a class="btn btn-sm btn-primary" href="@Url.Action("EditContent", "Site", new { id = Model.SiteContentId })"><i class="fas fa-edit"></i> Edit site</a></li>
-            }
-            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded)
-            {
-                <li>
-                    <div class="btn-group" role="group">
-                        <button id="btnPageTypes" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-plus"></i>Add
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnPageTypes">
-                            @foreach (var type in Model.PageTypes)
-                            {
-                                <a class="dropdown-item btn-panel-region" href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a>
-                            }
+                    </li>
+                }
+                @if (Model.HasSiteContent)
+                {
+                    <li><a class="btn btn-sm btn-primary" href="@Url.Action("EditContent", "Site", new { id = Model.SiteContentId })"><i class="fas fa-edit"></i> Edit site</a></li>
+                }
+                @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesAdd)).Succeeded)
+                {
+                    <li>
+                        <div class="btn-group" role="group">
+                            <button id="btnPageTypes" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-plus"></i>Add
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnPageTypes">
+                                @foreach (var type in Model.PageTypes)
+                                {
+                                    <a class="dropdown-item btn-panel-region" href="@Url.Action("Add", new { type = type.Id, siteId = Model.SiteId })">@type.Title</a>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </li>
-            }
-        </ul>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Content</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
     </nav>
 </div>
-
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item">Content</li>
-    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-  </ol>
-</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
     <div class="row">

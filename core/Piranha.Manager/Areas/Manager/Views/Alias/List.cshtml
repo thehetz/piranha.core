@@ -4,43 +4,44 @@
     ViewBag.Controller = "Alias";
 }
 
-<div class="top-nav">
-    <nav>
-        <ul class="navbar-nav">
-            @if (Model.Sites.Count() > 1)
-            {
-                <li>
-                    <div class="btn-group" role="group">
-                        <button id="btnSites" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-globe"></i>@Model.SiteTitle
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="btnSites">
-                            @foreach (var site in Model.Sites)
-                            {
-                                <a class="dropdown-item btn-panel-region" href="@Url.Action("List", new { siteId = site.Id })">@site.Title</a>
-                            }
+<div class="top">
+    <div class="top-nav">
+        <nav>
+            <ul class="navbar-nav">
+                @if (Model.Sites.Count() > 1)
+                {
+                    <li>
+                        <div class="btn-group" role="group">
+                            <button id="btnSites" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-globe"></i>@Model.SiteTitle
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="btnSites">
+                                @foreach (var site in Model.Sites)
+                                {
+                                    <a class="dropdown-item btn-panel-region" href="@Url.Action("List", new { siteId = site.Id })">@site.Title</a>
+                                }
+                            </div>
                         </div>
-                    </div>
-                </li>
-            }
-            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded)
-            {
-                <li>
-                    <a href="#" class="btn btn-sm btn-labeled btn-primary" data-toggle="panel" data-target="#panelAlias">
-                        <i class="fas fa-plus"></i>Add
-                    </a>
-                </li>
-            }
-        </ul>
+                    </li>
+                }
+                @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded)
+                {
+                    <li>
+                        <a href="#" class="btn btn-sm btn-labeled btn-primary" data-toggle="panel" data-target="#panelAlias">
+                            <i class="fas fa-plus"></i>Add
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Settings</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
     </nav>
 </div>
-
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">Settings</li>
-        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-    </ol>
-</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
     <div class="row">

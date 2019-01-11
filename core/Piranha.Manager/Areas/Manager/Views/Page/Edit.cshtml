@@ -257,41 +257,40 @@
 
     <h1 style="display:none">@ViewBag.Title</h1>
 
-    <div class="top-nav">
-        <nav>
-            <ul class="navbar-nav">
-                @if (Model.Regions.Count > 0)
-                {
-                    <li>
-                        <div class="btn-group" role="group">
-                            <button id="btnContent" type="button" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-table"></i>Regions
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="btnContent">
-                                @foreach (var region in Model.Regions)
-                                {
-                                    <a class="dropdown-item btn-panel-region" data-toggle="panel" data-target="#region-@region.Id" href="#">@region.Id</a>
-                                }
+    <div class="top">
+        <div class="top-nav">
+            <nav>
+                <ul class="navbar-nav">
+                    @if (Model.Regions.Count > 0)
+                    {
+                        <li>
+                            <div class="btn-group" role="group">
+                                <button id="btnContent" type="button" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-table"></i>Regions
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="btnContent">
+                                    @foreach (var region in Model.Regions)
+                                    {
+                                        <a class="dropdown-item btn-panel-region" data-toggle="panel" data-target="#region-@region.Id" href="#">@region.Id</a>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                }
-                <li>
-                    <button id="btn-settings" type="button" class="btn btn-sm btn-primary btn-icon"  data-toggle="panel" data-target="#panelSettings">
-                        <span class="fas fa-cog"></span>
-                    </button>
-                </li>
-                <li>
-                    <div id="btnActions" class="btn-group" role="group">
-                        <button id="main-submit" type="submit" class="btn btn-sm btn-labeled btn-success">
-                            <i class="fas fa-check"></i>
-                            @if (Model.Published.HasValue) {
-                                <text>Update</text>
-                            } else {
-                                <text>Save draft</text>
-                            }
+                        </li>
+                    }
+                    <li style="display:none">
+                        <button id="btn-settings" type="button" class="btn btn-sm btn-primary btn-icon"  data-toggle="panel" data-target="#panelSettings">
+                            <span class="fas fa-cog"></span>
                         </button>
-                        <button type="button" class="btn btn-sm btn-labeled btn-success btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    </li>
+                    <li>
+                        <!--<div id="btnActions" class="btn-group" role="group">-->
+                            <button id="main-submit" type="submit" class="btn btn-sm btn-success">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        <!--</div>-->
+                    </li>
+                    <li>
+                        <button id="btnActions" type="button" class="btn btn-sm btn-labeled btn-primary btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnActions">
@@ -312,6 +311,7 @@
                                     <a id="submit-publish" class="dropdown-item" href="#">Publish now</a>
                                 }
                             }
+                            <a id="btn-settings" class="dropdown-item" data-toggle="panel" data-target="#panelSettings">Settings</a>
                             @if (Model.OriginalPageId.HasValue)
                             {
                                 if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesSave)).Succeeded)
@@ -326,9 +326,16 @@
                                 <a href="@Url.Action("Delete", new { @id = Model.Id })" class="dropdown-item confirm-delete" data-message="Are you sure you want to delete the page?"><span class="text-danger">Delete page</span></a>
                             }
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Content</li>
+                <li class="breadcrumb-item"><a href="@Url.Action("List")">Pages</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Edit</li>
+            </ol>
         </nav>
     </div>
 
@@ -343,14 +350,6 @@
     }
 
     <div class="body-content">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">Content</li>
-                <li class="breadcrumb-item"><a href="@Url.Action("List")">Pages</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Edit</li>
-            </ol>
-        </nav>
-
         <div class="form-group">
             @Html.TextBoxFor(m => m.Title, new { @class = "title", maxlength = 128, placeholder = "Your page title" })
             @Html.ValidationMessageFor(m => m.Title)

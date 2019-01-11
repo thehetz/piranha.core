@@ -13,31 +13,32 @@
 @using (var form = Html.BeginForm("Save", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
     @Html.HiddenFor(m => m.Site.Id)
 
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">Settings</li>
-            <li class="breadcrumb-item"><a href="@Url.Action("List", "Site")">Sites</a></li>
-            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-        </ol>
-    </nav>
-
-    <div class="top-nav">
-        <nav>
-            <ul class="navbar-nav">
-                @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.SitesEdit)).Succeeded)
-                {
-                    <li>
-                        <button type="submit" class="btn btn-sm btn-labeled btn-success">
-                            <i class="fas fa-check"></i>
-                            @if (Model.Site.Id != Guid.Empty) {
-                                <text>Update</text>
-                            } else {
-                                <text>Save</text>
-                            }
-                        </button>
-                    </li>
-                }
-            </ul>
+    <div class="top">
+        <div class="top-nav">
+            <nav>
+                <ul class="navbar-nav">
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.SitesEdit)).Succeeded)
+                    {
+                        <li>
+                            <button type="submit" class="btn btn-sm btn-labeled btn-success">
+                                <i class="fas fa-check"></i>
+                                @if (Model.Site.Id != Guid.Empty) {
+                                    <text>Update</text>
+                                } else {
+                                    <text>Save</text>
+                                }
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">Settings</li>
+                <li class="breadcrumb-item"><a href="@Url.Action("List", "Site")">Sites</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
         </nav>
     </div>
 

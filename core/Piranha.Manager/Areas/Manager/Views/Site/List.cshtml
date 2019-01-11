@@ -4,27 +4,28 @@
     ViewBag.Controller = "Site";
 }
 
-<div class="top-nav">
-    <nav>
-        <ul class="navbar-nav">
-            @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.SitesAdd)).Succeeded)
-            {
-                <li>
-                    <a href="@Url.Action("Add")" class="btn btn-sm btn-labeled btn-primary">
-                        <i class="fas fa-plus"></i>Add
-                    </a>
-                </li>
-            }
-        </ul>
+<div class="top">
+    <div class="top-nav">
+        <nav>
+            <ul class="navbar-nav">
+                @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.SitesAdd)).Succeeded)
+                {
+                    <li>
+                        <a href="@Url.Action("Add")" class="btn btn-sm btn-labeled btn-primary">
+                            <i class="fas fa-plus"></i>Add
+                        </a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Settings</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
     </nav>
 </div>
-
-<nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item">Settings</li>
-        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-    </ol>
-</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
 {

@@ -34,7 +34,7 @@
         }
     }
 
-    .block-buttons {
+    .block-buttons, .block-extras {
         position: absolute;
         top: 1px;
         right: 1px;
@@ -66,6 +66,10 @@
         }
     }
 
+    .block-extras {
+        right: 61px;
+    }
+
     .content-area {
         &:focus {
             outline: none;
@@ -81,15 +85,15 @@
 			background: $bg_panel url('/assets/img/empty-text.png') 50% 50% no-repeat;
 			border: solid 10px $bg_panel;
             min-height: 106px !important;
-            
-			p:first-of-type {
+
+            p:first-of-type {
 				min-height: 86px;
 			}
         }
-        
+
         &:focus {
             outline: none;
-        }        
+        }
     }
 
     img {
@@ -122,7 +126,7 @@
 			opacity: 0;
             transition: opacity ease-in-out 0.2s;
         }
-        
+
         .block-image-filename {
             background: $bg;
             color: $text_light;
@@ -131,10 +135,10 @@
             top: .5rem;
             left: .5rem;
             font-size: .75rem;
-            text-transform: uppercase;            
+            text-transform: uppercase;
             opacity: .7;
             display: none;
-        }        
+        }
 
 		&:hover {
 			.block-image-picker {
@@ -143,7 +147,7 @@
 			}
 		}
     }
-    
+
     .block-quote {
         .editor-area {
             color: $text-light;
@@ -162,16 +166,12 @@
             margin-bottom: 0;
         }
     }
-    
+
     &:hover {
         border-color: $color_border;
         transition: border-color .2s ease-in-out;
 
-        .block-label {
-            opacity: 1;
-            transition: opacity .2s ease-in-out;
-        }
-        .block-buttons {
+        .block-label, .block-buttons, .block-extras {
             opacity: 1;
             transition: opacity .2s ease-in-out;
         }
@@ -183,13 +183,13 @@
     text-transform: uppercase;
     font-weight: bold;
     background: #ccc;
-    padding: .5rem;    
+    padding: .5rem;
 }
 
 .block-type {
     display: inline-block;
     width: 32%;
-    margin-bottom: .5rem;    
+    margin-bottom: .5rem;
 
     a {
         display: block;
