@@ -311,7 +311,7 @@
                                     <a id="submit-publish" class="dropdown-item" href="#">Publish now</a>
                                 }
                             }
-                            <a id="btn-settings" class="dropdown-item" data-toggle="panel" data-target="#panelSettings">Settings</a>
+                            <a id="btn-settings" class="dropdown-item" href="#" data-toggle="panel" data-target="#panelSettings">Settings</a>
                             @if (Model.OriginalPageId.HasValue)
                             {
                                 if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesSave)).Succeeded)
