@@ -151,6 +151,8 @@
                     </tr>
                 }
                 @foreach (var folder in Model.Folders) {
+                    var filesInFolder = Model.FilesInFolder[folder.Id];
+
                     <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
                         <td class="text-limit-cell">
                             <a href="@Url.Action("List", new { folderId = folder.Id})">
@@ -159,12 +161,15 @@
                             </a>
                         </td>
                         <td></td>
-                        <td></td>
+                        <td>@filesInFolder @(filesInFolder == 1 ? "item" : "items")</td>
                         <td>@folder.Created.ToString("yyyy-MM-dd")</td>
                         <td class="actions one">
-                            <a class="remove confirm-delete" href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top" data-message="Are you sure you want to delete the media folder?">
-                                <i class="fas fa-trash text-danger"></i>
-                            </a>
+                            @if (filesInFolder == 0)
+                            {
+                                <a class="remove confirm-delete" href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top" data-message="Are you sure you want to delete the media folder?">
+                                    <i class="fas fa-trash text-danger"></i>
+                                </a>
+                            }
                         </td>
                     </tr>
                 }
