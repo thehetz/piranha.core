@@ -7,7 +7,7 @@
 <div class="top-nav">
     <nav>
         <ul class="navbar-nav">
-            @if (Model.Sites.Count() > 1) 
+            @if (Model.Sites.Count() > 1)
             {
                 <li>
                     <div class="btn-group" role="group">
@@ -15,7 +15,7 @@
                             <i class="fas fa-globe"></i>@Model.SiteTitle
                         </button>
                         <div class="dropdown-menu" aria-labelledby="btnSites">
-                            @foreach (var site in Model.Sites) 
+                            @foreach (var site in Model.Sites)
                             {
                                 <a class="dropdown-item btn-panel-region" href="@Url.Action("List", new { siteId = site.Id })">@site.Title</a>
                             }
@@ -32,10 +32,15 @@
                 </li>
             }
         </ul>
-    </nav>            
+    </nav>
 </div>
 
-<h1>@ViewBag.Title</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Settings</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
     <div class="row">
@@ -71,7 +76,7 @@
                     }
                 </td>
                 <td class="actions one">
-                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {        
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesDelete)).Succeeded) {
                         <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = alias.Id })" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the alias?">
                             <span class="fas fa-trash text-danger"></span>
                         </a>
@@ -88,7 +93,7 @@
         <a class="panel-close" href="#"><i class="fas fa-times"></i></a>
         <span class="panel-title">Create Alias</span>
         <div class="panel-body">
-            @using (var form = Html.BeginForm("Add", "Alias", FormMethod.Post, new { @class = "form", @role = "form" })) 
+            @using (var form = Html.BeginForm("Add", "Alias", FormMethod.Post, new { @class = "form", @role = "form" }))
             {
                 <input type="hidden" name="SiteId" value="@Model.SiteId">
                 <div class="form-group">

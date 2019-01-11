@@ -13,8 +13,10 @@ body {
     }
 
     .body-content {
-        max-width: 860px;
-        padding: 2rem 0;
+        background: $bg;
+        max-width: 960px;
+        padding: 0 2rem 2rem;
         margin: 0 auto;
+        font-size: 1rem;
     }
 }

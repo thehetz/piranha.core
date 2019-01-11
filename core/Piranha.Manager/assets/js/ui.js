@@ -88,7 +88,9 @@ $(document).ready(function() {
         $(this).parent().removeClass("active");
     });
 
-    $("[data-toggle='panel']").click(function () {
+    $("[data-toggle='panel']").click(function (e) {
+        e.preventDefault();
+
         var panel = $($(this).attr("data-target"));
 
         // Set autofocus
@@ -129,7 +131,7 @@ $(document).on("keyup",
 //
 // Sortable
 //
-var sortableBlocks = sortable(".page-blocks-body .sortable",
+var sortableBlocks = sortable(".blocks .sortable",
     {
         handle: ".sortable-handle",
         items: ":not(.unsortable)"
@@ -654,7 +656,7 @@ var manager = {
                     GroupType: groupType
                 }),
                 success: function(res) {
-                    $(".page-blocks-body >.block-info").remove();
+                    $(".blocks >.block-info").remove();
                     $(res).insertAfter(target);
 
                     // If the new region contains a html editor, make sure
@@ -677,7 +679,7 @@ var manager = {
         },
 
         recalcblocks: function() {
-            var items = $(".page-blocks-body .sortable >.sortable-item");
+            var items = $(".blocks .sortable >.sortable-item");
 
             for (var n = 0; n < items.length; n++) {
                 var inputs = $(items.get(n)).find("input, textarea, select");

@@ -9,5 +9,19 @@
         font-size: .8rem;
         font-weight: bold;
         text-transform: uppercase;
+
+        .breadcrumb-item {
+            color: $color_link;
+
+            &.active {
+                color: $text_lighter;
+            }
+        }
+    }
+
+    pre {
+        background: $bg_panel;
+        padding: .5rem;
+        margin: 0 -.5rem 1rem;
     }
 }

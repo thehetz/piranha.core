@@ -30,11 +30,11 @@
 
     ul {
         padding: 0;
-        width: 200px;
 
         li {
             border-top: solid 1px lighten($bg_navbar, 10%);
             position: relative;
+            white-space: nowrap;
 
             &:last-child {
                 border-bottom: solid 1px lighten($bg_navbar, 10%);

@@ -4,7 +4,12 @@
     ViewBag.Controller = "Module";
 }
 
-<h1>@ViewBag.Title</h1>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">System</li>
+    <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+  </ol>
+</nav>
 
 <table class="table table-main">
     <thead>

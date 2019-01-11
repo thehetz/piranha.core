@@ -48,7 +48,7 @@
             if (!targetId)
                 target = target.closest('tr');
             target.removeClass('dropping');
-        }        
+        }
 
         function drag (e) {
             e.dataTransfer.setData("text", $(e.target).attr('data-id'));
@@ -60,12 +60,12 @@
             var targetId = $(e.target).attr('data-id');
             if (!targetId)
                 targetId = $(e.target).closest('tr').attr('data-id');
-        
+
             $('#mediaId').val(e.dataTransfer.getData("text"));
             $('#targetId').val(targetId);
             $('#move-form').submit();
-        }        
-    </script>    
+        }
+    </script>
 }
 
 @using (var form = Html.BeginForm("Move", "Media", FormMethod.Post, new { id="move-form", @class = "form", role = "form", style = "margin-top:0" })) {
@@ -89,10 +89,15 @@
                 </div>
             </li>
         </ul>
-    </nav>            
+    </nav>
 </div>
 
-<h1>@ViewBag.Title</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Content</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message)) {
     <div class="row">
@@ -142,7 +147,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td class="actions one"></td>                        
+                        <td class="actions one"></td>
                     </tr>
                 }
                 @foreach (var folder in Model.Folders) {
@@ -177,7 +182,7 @@
                                 } else if (item.Type == MediaType.Document) {
                                     <i class="fas fa-book media-icon"></i>
                                 } else {
-                                    <i class="fas fa-exclamation-triangle media-icon"></i>                                
+                                    <i class="fas fa-exclamation-triangle media-icon"></i>
                                 }
                                 @item.Filename
                             </a>

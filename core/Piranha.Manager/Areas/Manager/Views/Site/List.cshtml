@@ -16,10 +16,15 @@
                 </li>
             }
         </ul>
-    </nav>            
+    </nav>
 </div>
 
-<h1>@ViewBag.Title</h1>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">Settings</li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+    </ol>
+</nav>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
 {

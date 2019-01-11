@@ -1,0 +1,76 @@
+﻿@model Piranha.Areas.Manager.Models.PageEditModel
+@{
+    var isCopy = Model.OriginalPageId.HasValue;
+}
+
+<div id="panelSettings" class="panel panel-settings">
+    <a class="panel-close" href="#"><i class="fas fa-times"></i></a>
+    <span class="panel-title">Page Settings</span>
+
+    <div class="panel-body">
+        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded)
+        {
+            <div class="form-group">
+                <label>Publish date</label>
+                <input asp-for="Published" class="form-control form-control-sm">
+            </div>
+        }
+        else
+        {
+            <input asp-for="Published" type="hidden">
+        }
+        <div class="form-group">
+            <label>Navigation title</label>
+            <input asp-for="NavigationTitle" class="form-control form-control-sm" placholder="Optional navigation title" maxlength="128">
+        </div>
+        <div class="form-group">
+            <label>Hidden</label>
+            <div class="form-check">
+                <input asp-for="IsHidden" type="checkbox" class="form-check-input">
+                <label asp-for="IsHidden" class="form-check-label">If the page should be hidden in the sitemap</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Slug</label>
+            <input asp-for="Slug" class="form-control form-control-sm" placholder="The unique slug" maxlength="128">
+        </div>
+        @if (!isCopy)
+        {
+            <div class="form-group">
+                <label>Redirect</label>
+                <input asp-for="RedirectUrl" class="form-control form-control-sm" placholder="Optional redirect URL" maxlength="255">
+            </div>
+            <div class="form-group">
+                <label>Redirect type</label>
+                <select name="RedirectType" class="form-control form-control-sm">
+                    <option value="0" @(Model.RedirectType == Piranha.Models.RedirectType.Permanent ? "selected=selected" : "")>Permanent</option>
+                    <option value="1" @(Model.RedirectType == Piranha.Models.RedirectType.Temporary ? "selected=selected" : "")>Temporary</option>
+                </select>
+            </div>
+        }
+        @if (Model.PageType.Routes.Count > 1)
+        {
+            <div class="form-group">
+                <label>Route</label>
+                <select name="Route" class="form-control form-control-sm">
+                    @foreach (var item in Model.PageType.Routes)
+                    {
+                        <option value="@item.Route" @(Model.Route == item.Route ? "selected=selected" : "")>@item.Title</option>
+                    }
+                </select>
+            </div>
+        }
+        @if (!isCopy)
+        {
+            <div class="form-group">
+                <label>Meta Keywords</label>
+                <input asp-for="MetaKeywords" class="form-control form-control-sm" placeholder="Meta Keywords" maxlength="128">
+            </div>
+            <div class="form-group">
+                <label>Meta description</label>
+                <textarea asp-for="MetaDescription" class="form-control form-control-sm count-me" rows="5" maxlength="255" placeholder = "Meta description" style="height:82px"></textarea>
+                <p>@(Model.MetaDescription != null ? Model.MetaDescription.Length : 0)/255</p>
+            </div>
+        }
+    </div>
+</div>

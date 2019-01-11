@@ -1,10 +1,11 @@
 .image-field {
     &.card {
         margin-right: 90px;
+        margin-bottom: 0;
 
         .card-body {
             padding: .475rem;
-            font-size: .875rem;                
+            font-size: .875rem;
         }
     }
 }

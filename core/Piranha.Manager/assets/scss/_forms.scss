@@ -23,6 +23,7 @@ form {
             margin-bottom: 1rem;
             font-family: "Open Sans", sans-serif;
             font-size: 2.5rem;
+            font-weight: 300;
         }
 
         &:hover {
@@ -32,6 +33,12 @@ form {
 
     .form-control {
         border-color: $color_border;
+
+        &:focus {
+            border-color: inherit;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
     }
 
     .form-group {

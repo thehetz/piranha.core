@@ -15,7 +15,11 @@
         i {
             padding-right: .5rem;
             border-right: solid 1px rgba(255,255,255,0.3);
-            margin-right: .5rem;            
+            margin-right: .5rem;
         }
+    }
+
+    &.btn-icon {
+        width: 32px;
     }
 }

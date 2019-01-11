@@ -15,15 +15,16 @@
         <div class="block-actions">
             @if (!Model.IsGroup)
             {
-                <i class="@blockType.Icon pull-left block-icon"></i>
-                <span class="pull-left block-name">@blockType.Name</span>
+                <span class="block-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
             }
-            else 
+            else
             {
                 <button class="btn btn-secondary btn-sm block-expand"><span class="fas fa-angle-down"></span></button>
             }
-            <div class="btn btn-secondary btn-sm sortable-handle"><span class="fas fa-ellipsis-v"></span></div>
-            <button class="btn btn-secondary btn-sm block-remove"><span class="fas fa-trash"></span></button>
+            <div class="block-buttons">
+                <div class="btn btn-sm btn-secondary sortable-handle" data-toggle="tooltip" data-placement="bottom" title="Move"><span class="fas fa-ellipsis-v"></span></div>
+                <button class="btn btn-sm btn-secondary block-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
+            </div>
         </div>
         @Html.HiddenFor(m => m.Id)
         @Html.HiddenFor(m => m.CLRType)
@@ -68,14 +69,14 @@
                 </div>
                 @for (var n = 0; n < Model.Items.Count(); n++)
                 {
-                    @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true, GroupType = blockType }) 
+                    @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true, GroupType = blockType })
                 }
             </div>
         } else {
             @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
         }
     </div>
-    <div class="block-add block-add-above">
+    <div class="block-add block-add-above" style="display:none">
         <div class="block-add-dialog">
             @foreach (var category in Piranha.App.Blocks.GetCategories()) {
                 var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);

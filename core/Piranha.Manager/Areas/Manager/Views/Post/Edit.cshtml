@@ -85,7 +85,7 @@
                 success: function (data) {
                     piranha.notifications.add(
                             piranha.notifications.create(
-                                notificationTemplates.aliasSuggestionSuccess));                   
+                                notificationTemplates.aliasSuggestionSuccess));
                 },
                 error: function () {
                     piranha.notifications.add(
@@ -173,7 +173,7 @@
                         piranha.notifications.add(
                             piranha.notifications.create(
                                 notificationTemplates.postUnpublishedSuccessfully));
-                    } else {                        
+                    } else {
                         piranha.notifications.add(
                             piranha.notifications.create(
                                 notificationTemplates.postSavedSuccessfully));
@@ -183,7 +183,7 @@
                     piranha.notifications.add(
                         piranha.notifications.create(
                             notificationTemplates.error));
-                } 
+                }
             }).always(function () {
                 $("form#main-form").trigger("reset-action");
                  icon.className = "fas fa-check";
@@ -269,7 +269,7 @@
                         } else {
                             <text>Save</text>
                         }
-                    </span>                    
+                    </span>
                 </button>
                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
@@ -306,6 +306,15 @@
             </div>
         </div>
     }
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Content</li>
+            <li class="breadcrumb-item"><a href="@Url.Action("List", "Page")">Pages</a></li>
+            <li class="breadcrumb-item" aria-current="page"><a href="@Url.Action("Edit", "Page", new { id = Model.BlogId })">Edit</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Post</li>
+        </ol>
+    </nav>
 
     <div class="form-group">
         @Html.TextBoxFor(m => m.Title, new { @class = "form-control title", maxlength = 128, placeholder = "Your post title" })
@@ -439,7 +448,7 @@
                 @Html.HiddenFor(m => m.Regions[n].Id)
                 @Html.HiddenFor(m => m.Regions[n].Title)
                 @Html.HiddenFor(m => m.Regions[n].CLRType)
-                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new { 
+                @Html.EditorFor(m => m.Regions[n], Model.Regions[n].GetType().Name, new {
                     pageTypeId = Model.PostType.Id,
                     regionTypeId = Model.Regions[n].Id,
                     regionIndex = n,
