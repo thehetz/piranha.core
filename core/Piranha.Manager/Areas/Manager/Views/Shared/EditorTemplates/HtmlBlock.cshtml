@@ -7,9 +7,8 @@
 
 @Html.HiddenFor(m => m.Body.Value, "")
 <div id="Editor_@Guid.NewGuid()" class="block-editor content-preview editor-area @(isEmpty ? "empty" : "check-empty")" data-id="@(prefix)_Body_Value">
-    @if (!string.IsNullOrWhiteSpace(Model.Body.Value)) {
+    @if (!string.IsNullOrWhiteSpace(Model.Body.Value))
+    {
         @Html.Raw(Model.Body.Value)
-    } else {
-        <p></p>
     }
 </div>

@@ -162,8 +162,10 @@
 
     .block-text {
         pre {
+            background: #fff;
             white-space: normal;
             margin-bottom: 0;
+            min-height: 21px;
         }
     }
 
