@@ -1,0 +1,17 @@
+<div class="panel panel-blocks">
+    <span class="panel-title">Create Block</span>
+    <div class="panel-body block-types">
+        <div class="panel-handle unsortable"><i class="fas fa-ellipsis-v"></i></div>
+        @foreach (var category in Piranha.App.Blocks.GetCategories()) {
+            var items = Piranha.App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
+
+            <h3 class="block-category unsortable">@category</h3>
+            @foreach (var block in items)
+            {
+                <div class="block-type" data-typename="@block.TypeName">
+                    <a href="#" ><i class="@block.Icon"></i><span>@block.Name</span></a>
+                </div>
+            }
+        }
+    </div>
+</div>

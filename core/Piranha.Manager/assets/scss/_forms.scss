@@ -13,8 +13,6 @@ input {
 }
 
 form {
-    //margin-top: 1.5rem;
-
     input {
         &.title {
             border: solid 1px transparent;
@@ -33,6 +31,12 @@ form {
 
     .form-control {
         border-color: $color_border;
+
+        &.image-caption {
+            padding: .5rem .5rem 0;
+            height: auto;
+            border: 0;
+        }
 
         &:focus {
             border-color: inherit;

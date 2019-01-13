@@ -82,7 +82,7 @@
 
     .editor-area {
 		&.empty {
-			background: $bg_panel url('/assets/img/empty-text.png') 50% 50% no-repeat;
+			background: $bg_panel url('../img/empty-text.png') 50% 50% no-repeat;
 			border: solid 10px $bg_panel;
             min-height: 106px !important;
 

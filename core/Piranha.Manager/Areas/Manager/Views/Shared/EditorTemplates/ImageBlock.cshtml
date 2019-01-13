@@ -6,7 +6,8 @@
 }
 
 <div class="block-image">
-    <img id="@(unique)_Preview" src="@(Model.Body.Media != null ? Url.Content(Model.Body.Media.PublicUrl) : "/manager/assets/img/block-img-placeholder.png")">
+    @Html.HiddenFor(m => m.Body.Id)
+    <img id="@(unique)_Preview" src="@(Model.Body.Media != null ? Url.Content(Model.Body.Media.PublicUrl) : "/manager/assets/img/empty-image.png")">
     <div class="block-image-picker">
         @Html.HiddenFor(m => m.Body.Id)
         <div class="btn-group float-right" role="group">
@@ -37,3 +38,4 @@
         </div>
     </div>
 </div>
+<input asp-for="Caption.Value" placeholder="Optional caption" class="form-control form-control-sm text-center image-caption">

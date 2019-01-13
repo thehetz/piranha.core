@@ -3,9 +3,9 @@
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
-// 
+//
 
 /*global
     piranha, baseUrl
@@ -92,7 +92,7 @@ piranha.media = new function() {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
-                mediaUrlCtrl.attr("src", "/manager/assets/img/block-img-placeholder.png");
+                mediaUrlCtrl.attr("src", baseUrl + "/manager/assets/img/empty-image.png");
             }
         }
     };
@@ -107,7 +107,7 @@ piranha.media = new function() {
                     piranha.media.reload();
                 });
             }
-        });    
+        });
     };
 };
 
@@ -133,9 +133,9 @@ $(document).on("submit", "#modalMedia form", function (e) {
         url: $(this).attr("action"),
         type: "POST",
         data: formData,
-        contentType: false,       
-        cache: false,             
-        processData: false,                                  
+        contentType: false,
+        cache: false,
+        processData: false,
         success: function (data) {
             $("#modalMedia .modal-body").html(data);
         },
@@ -144,7 +144,7 @@ $(document).on("submit", "#modalMedia form", function (e) {
             console.log(b)
             console.log(c)
         }
-    }); 
+    });
 });
 
 $(document).on("click", ".btn-media-clear", function () {
@@ -186,7 +186,7 @@ $(document).on("show.bs.modal","#modalImgPreview", function (event) {
 
     if (!id || id == "")
         modal.find(".fileinput").hide();
-    else modal.find(".fileinput").show(); 
+    else modal.find(".fileinput").show();
 
     if (contenttype.startsWith("image")) {
         modal.find("#previewImage").show();

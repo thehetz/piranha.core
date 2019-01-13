@@ -35,6 +35,7 @@ var input = {
         "Assets/js/piranha.media.js",
         "Assets/js/piranha.page.js",
         "Assets/js/piranha.post.js",
+        "Assets/js/piranha.blocks.js",
         "Assets/js/ui.js"
     ],
     signaljs: [

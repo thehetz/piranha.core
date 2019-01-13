@@ -100,7 +100,6 @@ $(document).ready(function() {
         $($(this).attr("data-target")).addClass("active");
     });
 
-    manager.tools.positionblocks();
     manager.tools.positionButtonsFixed();
 });
 
@@ -131,28 +130,6 @@ $(document).on("keyup",
 //
 // Sortable
 //
-var sortableBlocks = sortable(".blocks .sortable",
-    {
-        handle: ".sortable-handle",
-        items: ":not(.unsortable)"
-    });
-for (var n = 0; n < sortableBlocks.length; n++) {
-    sortableBlocks[n].addEventListener("sortupdate",
-        function(e) {
-            manager.tools.recalcblocks();
-        });
-}
-var sortableBlockItems = sortable(".block-group-body",
-    {
-        handle: ".sortable-handle",
-        items: ":not(.unsortable)"
-    });
-for (var n = 0; n < sortableBlockItems.length; n++) {
-    sortableBlockItems[n].addEventListener("sortupdate",
-        function(e) {
-            manager.tools.recalcblocks();
-        });
-}
 var sortableRegions = sortable(".region-list.sortable",
     {
         handle: ".sortable-handle"
@@ -176,106 +153,6 @@ $(document).on("click",
     function() {
         $(this).parent().parent().toggleClass("expanded");
     });
-
-//
-// Blocks
-//
-$(document).on("click",
-    ".block-remove",
-    function() {
-        $(this).closest(".sortable-item").remove();
-        manager.tools.recalcblocks();
-    });
-$(document).on("click",
-    ".block-add-toggle",
-    function(e) {
-        e.preventDefault();
-
-        var active = $(this).parent().hasClass("active");
-        $(".block-add").removeClass("active");
-
-        if (!active) {
-            $(this).parent().addClass("active");
-            $(".form-dimmer").addClass("active");
-        } else {
-            $(".form-dimmer").removeClass("active");
-        }
-    });
-$(document).on("click",
-    ".block-add-dialog a",
-    function(e) {
-        e.preventDefault();
-
-        manager.tools.addblock($(this).parent().parent().parent(),
-            $(this).attr("data-typename"),
-            "page",
-            $(this).attr("data-includegroups"),
-            $(this).attr("data-grouptype"),
-            function() {
-                manager.tools.recalcblocks();
-                $(".block-add, .form-dimmer").removeClass("active");
-            });
-    });
-$(document).on("click",
-    ".form-dimmer",
-    function(e) {
-        e.preventDefault();
-
-        $(".block-add.active").removeClass("active");
-        $(this).removeClass("active");
-    });
-$(document).on("click",
-    ".block-html-swap",
-    function(e) {
-        e.preventDefault();
-
-        var columns = $(this).parent().parent().find(".block-editor");
-        if (columns.length == 2) {
-            var col1 = $(columns[0]).html();
-            var col2 = $(columns[1]).html();
-
-            $(columns[0]).html(col2);
-            $(columns[1]).html(col1);
-        }
-    });
-$(document).on("click",
-    ".block-group-info",
-    function(e) {
-        e.preventDefault();
-
-        $(this).parent().find(".block-expand").click();
-    });
-$(document).on("click",
-    ".block-group .block-expand",
-    function(e) {
-        e.preventDefault();
-
-        $(this).parent().parent().find(".block-info").slideToggle();
-        $(this).parent().parent().find(".block-group-body").slideToggle();
-        $(this).find("span").toggleClass("fa-angle-down");
-        $(this).find("span").toggleClass("fa-angle-up");
-    });
-$(document).on("focus",
-    ".block .empty",
-    function() {
-        $(this).removeClass("empty");
-        $(this).addClass("check-empty");
-    });
-$(document).on("blur",
-    ".block .check-empty",
-    function() {
-        if (manager.tools.isempty(this)) {
-            $(this).removeClass("check-empty");
-            $(this).addClass("empty");
-        }
-    });
-$(window).scroll(function() {
-    manager.tools.positionblocks();
-});
-$(window).resize(function() {
-    manager.tools.positionButtonsFixed();
-});
-
 
 //
 // Panel toggle buttons
@@ -546,21 +423,6 @@ var manager = {
             return $(elm).text().replace(/\s/g, "") == "" && $(elm).find("img").length == 0;
         },
 
-        positionblocks: function() {
-            var toggles = $(".block-add");
-            var middle = $(window).height() / 2;
-
-            for (var n = 0; n < toggles.length; n++) {
-                var toggle = toggles.get(n);
-
-                if (toggle.getBoundingClientRect().y < middle) {
-                    $(toggle).removeClass("block-add-above").addClass("block-add-below");
-                } else {
-                    $(toggle).removeClass("block-add-below").addClass("block-add-above");
-                }
-            }
-        },
-
         markdown: function(str) {
             $.ajax({
                 url: "/manager/markdown",
@@ -643,114 +505,6 @@ var manager = {
             }
         },
 
-        addblock: function(target, blockType, contentType, includeGroups, groupType, cb) {
-            $.ajax({
-                url: "/manager/block/create",
-                method: "POST",
-                contentType: "application/json",
-                dataType: "html",
-                data: JSON.stringify({
-                    TypeName: blockType,
-                    BlockIndex: 0,
-                    IncludeGroups: includeGroups,
-                    GroupType: groupType
-                }),
-                success: function(res) {
-                    $(".blocks >.block-info").remove();
-                    $(res).insertAfter(target);
-
-                    // If the new region contains a html editor, make sure
-                    // we initialize it.
-                    var editors = $(res).find(".block-editor").each(function() {
-                        addInlineEditor("#" + this.id);
-                    });
-
-                    // Initialize markdown editors.
-                    $(res).find(".markdown-editor").each(function() {
-                        RegisterMarkdown($("#" + $(this).attr("id")).get(0));
-                    });
-
-                    if (cb)
-                        cb();
-
-                    manager.tools.setupBlockSortable();
-                }
-            });
-        },
-
-        recalcblocks: function() {
-            var items = $(".blocks .sortable >.sortable-item");
-
-            for (var n = 0; n < items.length; n++) {
-                var inputs = $(items.get(n)).find("input, textarea, select");
-
-                inputs.attr("id",
-                    function(i, val) {
-                        if (val)
-                            return val.replace(/Blocks_\d+__/, "Blocks_" + n + "__");
-                        return val;
-                    });
-                inputs.attr("name",
-                    function(i, val) {
-                        if (val)
-                            return val.replace(/Blocks\[\d+\]/, "Blocks[" + n + "]");
-                        return val;
-                    });
-
-                var content = $(items.get(n)).find("[contenteditable=true]");
-                content.attr("data-id",
-                    function(i, val) {
-                        if (val)
-                            return val.replace(/Blocks_\d+__/, "Blocks_" + n + "__");
-                        return val;
-                    });
-
-                var media = $(items.get(n)).find("button");
-                media.attr("data-mediaid",
-                    function(i, val) {
-                        if (val)
-                            return val.replace(/Blocks_\d+__/, "Blocks_" + n + "__");
-                        return val;
-                    });
-
-                var subitems = $(items.get(n)).find(".block-group-body .sortable-item");
-
-                for (var s = 0; s < subitems.length; s++) {
-                    var subInputs = $(subitems.get(s)).find("input, textarea, select");
-
-                    subInputs.attr("id",
-                        function(i, val) {
-                            if (val)
-                                return val.replace(/Blocks_\d+__Items_\d+__/, "Blocks_" + n + "__Items_" + s + "__");
-                            return val;
-                        });
-                    subInputs.attr("name",
-                        function(i, val) {
-                            if (val)
-                                return val.replace(/Blocks\[\d+\].Items\[\d+\]/, "Blocks[" + n + "].Items[" + s + "]");
-                            return val;
-                        });
-
-                    var subContent = $(subitems.get(s)).find("[contenteditable=true]");
-                    subContent.attr("data-id",
-                        function(i, val) {
-                            if (val)
-                                return val.replace(/Blocks_\d+__Items_\d+__/, "Blocks_" + n + "__Items_" + s + "__");
-                            return val;
-                        });
-
-                    var subContent = $(subitems.get(s)).find("button");
-                    subContent.attr("data-mediaid",
-                        function(i, val) {
-                            if (val)
-                                return val.replace(/Blocks_\d+__Items_\d+__/, "Blocks_" + n + "__Items_" + s + "__");
-                            return val;
-                        });
-                }
-            }
-            manager.tools.setupBlockSortable();
-        },
-
         tablesort: function(table, status, type, category, search) {
             $.each($(table).find("tr"),
                 function(i, e) {
@@ -774,11 +528,6 @@ var manager = {
                         else row.hide();
                     }
                 });
-        },
-
-        setupBlockSortable: function() {
-            sortable(".page-blocks-body .sortable");
-            sortable(".block-group-body");
         },
 
         positionButtonsFixed: function() {
