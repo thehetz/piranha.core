@@ -26852,7 +26852,7 @@ $(document).on("show.bs.modal",
 //
 
 /*global
-    piranha, baseUrl
+    piranha, baseUrl, sortable
  */
 
 if (typeof(piranha)  == "undefined") {
@@ -26976,7 +26976,7 @@ piranha.blocks = new function() {
      */
     self.selectGroupItem = function (elm) {
         // Activate/deactivate list items
-        elm.parent().find(".list-group-item").removeClass("active")
+        elm.parent().find(".list-group-item").removeClass("active");
         elm.addClass("active");
 
         // Hide/show item details
@@ -27099,7 +27099,7 @@ piranha.blocks = new function() {
         e.preventDefault();
 
         var columns = $(this).parent().parent().find(".block-editor");
-        if (columns.length == 2) {
+        if (columns.length === 2) {
             var col1 = $(columns[0]).html();
             var col2 = $(columns[1]).html();
 
