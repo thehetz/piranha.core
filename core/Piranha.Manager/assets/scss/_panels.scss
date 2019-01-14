@@ -1,7 +1,7 @@
 @import "colors";
 
 .panel {
-    background: $bg_panel;
+    background: $bg_main;
     position: fixed;
     height: 100%;
     top: 0;
@@ -17,7 +17,7 @@
     }
 
     .panel-handle {
-        background: $bg_panel;
+        background: $bg_main;
         position: absolute;
         width: 24px;
         height: 80px;

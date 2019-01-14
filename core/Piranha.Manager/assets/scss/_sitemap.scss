@@ -24,7 +24,7 @@ ol.sitemap {
 			list-style-type: none;
 		}
 
-        background: $color_border;
+        //background: $color_border;
         font-family: "Open Sans", Arial;
         font-weight: bold;
         text-transform: uppercase;
@@ -36,12 +36,12 @@ ol.sitemap {
 
 		.date {
 			width: 120px;
-			padding: 12px 20px;			
+			padding: 12px 20px;
 		}
 
 		.info {
 			width: 140px;
-			padding: 12px 20px;			
+			padding: 12px 20px;
 		}
     }
 }
@@ -80,7 +80,7 @@ li.sitemap-item {
 
 		.fa-minus-circle {
 			display: none;
-		}			
+		}
 	}
 
 	&.expanded {
@@ -102,7 +102,7 @@ li.sitemap-item {
 		background: #fff;
 		height: 43px;
 		padding: 10px 20px 10px 0;
-		margin: 2px 0 0 66px; 
+		margin: 2px 0 0 66px;
 		box-sizing: border-box;
 
 		a, .title {
@@ -113,12 +113,12 @@ li.sitemap-item {
 
 		.label:first-of-type {
 			margin-left: 10px;
-		}			
+		}
 	}
 
 	&.hover-remove {
 		opacity: 0.8;
-	}	
+	}
 
 	li {
 		.content a { padding-left: 35px; }
@@ -167,7 +167,7 @@ li.sitemap-item {
 			margin-top: 2px;
 			padding: 10px;
 			float: left;
-			
+
 			&.add-after, &.add-below {
 				font-size: 16px;
 				line-height: 14px;

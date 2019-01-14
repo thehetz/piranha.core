@@ -1,5 +1,19 @@
 @import "colors";
 
+body.content {
+    .main-nav {
+        border-color: $bg;
+
+        ul {
+            li {
+                &.active::after {
+                    border-right-color: $bg;
+                }
+            }
+        }
+    }
+}
+
 .main-nav
 {
     position: fixed;

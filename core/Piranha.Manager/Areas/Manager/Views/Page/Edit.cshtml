@@ -3,6 +3,7 @@
 @{
     ViewBag.Title = "Edit page";
     ViewBag.Controller = "Page";
+    ViewBag.BodyClass = "content";
 
     var alias = (string)TempData["AliasSuggestion"];
 }
@@ -11,6 +12,7 @@
     <script type="text/javascript">
         $(function () {
             piranha.blocks.init();
+            //$("body").addClass("content");
         });
 
         var notificationTemplates = {

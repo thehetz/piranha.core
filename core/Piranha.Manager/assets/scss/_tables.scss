@@ -3,15 +3,24 @@
 .table {
     thead {
         tr {
-            border-bottom: solid 4px $bg_main;
+            border-bottom: 0;
         }
-        
+
         th {
-            background: $color_border;
             font-family: "Open Sans",Arial;
             font-weight: 700;
             text-transform: uppercase;
-        }            
+            border-top: 0;
+            border-bottom: 0;
+
+            &.handle {
+                text-indent: 30px;
+            }
+
+            &:first-child {
+                padding-left: 1.25rem;
+            }
+        }
     }
     tbody {
         tr {
@@ -23,6 +32,8 @@
             }
 
             td:first-child {
+                padding-left: 1.25rem;
+
                 a {
                     display: block;
                     overflow: hidden;
@@ -69,8 +80,8 @@
                 td:first-child {
                     a {
                         font-family: "Open Sans",Arial;
-                        font-size: 1rem;                 
-                    }        
+                        font-size: 1rem;
+                    }
                 }
             }
         }
@@ -89,7 +100,7 @@
         .text-limit-cell {
             padding-left: 50px;
         }
-        
+
         .media-icon {
             color: $text_lighter;
             margin-right: .5rem;

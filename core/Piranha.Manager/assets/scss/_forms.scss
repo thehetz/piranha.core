@@ -1,10 +1,27 @@
 @import "colors";
 
+.panel {
+    .panel-body {
+        .form-control {
+            border-color: transparent;
+
+            &:hover {
+                border-color: $color_border;
+            }
+
+            &:focus {
+                border-color: $color_border;
+            }
+        }
+    }
+}
+
 input {
     &.search-field {
         color: $text_light;
         border: none 0;
         font-weight: 300;
+        border-radius: 0;
 
         &::placeholder {
             color: $text_lighter;
@@ -31,6 +48,8 @@ form {
 
     .form-control {
         border-color: $color_border;
+        border-radius: 0;
+        transition: border-color .2s ease-in-out;
 
         &.image-caption {
             padding: .5rem .5rem 0;
@@ -38,8 +57,14 @@ form {
             border: 0;
         }
 
+        &:hover {
+            border-color: darken($color_border, 2%);
+            -webkit-box-shadow: none;
+            box-shadow: none;
+        }
+
         &:focus {
-            border-color: inherit;
+            border-color: darken($color_border, 2%);
             -webkit-box-shadow: none;
             box-shadow: none;
         }
@@ -78,7 +103,6 @@ form {
         }
 
         &.submit {
-            border-top: solid 1px $color_border;
             padding-top: 1rem;
             margin-top: 1rem;
             text-align: right;
