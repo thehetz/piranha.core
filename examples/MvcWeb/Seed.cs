@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Piranha;
 using Piranha.Extend.Blocks;
@@ -17,7 +18,9 @@ namespace MvcWeb
                     new { id = Guid.NewGuid(), filename = "logo.png" },
                     new { id = Guid.NewGuid(), filename = "teaser1.png" },
                     new { id = Guid.NewGuid(), filename = "teaser2.png" },
-                    new { id = Guid.NewGuid(), filename = "teaser3.png" }
+                    new { id = Guid.NewGuid(), filename = "teaser3.png" },
+                    new { id = Guid.NewGuid(), filename = "8_Hyper-Light-Drifter.png" },
+                    new { id = Guid.NewGuid(), filename = "Drifter.jpg" }
                 };
 
                 // Get the default site id
@@ -28,7 +31,7 @@ namespace MvcWeb
                 {
                     using (var stream = File.OpenRead("seed/" + image.filename))
                     {
-                        api.Media.Save(new Piranha.Models.StreamMediaContent() 
+                        api.Media.Save(new Piranha.Models.StreamMediaContent()
                         {
                             Id = image.id,
                             Filename = image.filename,
@@ -48,7 +51,7 @@ namespace MvcWeb
                 // Start page hero
                 startpage.Hero.Subtitle = "By developers - for developers";
                 startpage.Hero.PrimaryImage = images[1].id;
-                startpage.Hero.Ingress = 
+                startpage.Hero.Ingress =
                     "<p>A lightweight & unobtrusive CMS for ASP.NET Core.</p>" +
                     "<p><small>Stable version 5.2.1 - 2018-10-17 - <a href=\"https://github.com/piranhacms/piranha.core/wiki/changelog\" target=\"_blank\">Changelog</a></small></p>";
 
@@ -87,6 +90,16 @@ namespace MvcWeb
                         });
                     }
                 }
+                startpage.Blocks.Add(new Models.Blocks.GalleryBlock
+                {
+                    Title = "Our Image Gallery",
+                    Description = "<p>Etiam porta sem malesuada magna mollis euismod. Vestibulum id ligula porta felis euismod semper. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>",
+                    Items = new List<Piranha.Extend.Block>
+                    {
+                        new ImageBlock { Body = images[5].id },
+                        new ImageBlock { Body = images[6].id }
+                    }
+                });
                 using (var stream = File.OpenRead("seed/startpage2.md"))
                 {
                     using (var reader = new StreamReader(stream))
@@ -106,7 +119,7 @@ namespace MvcWeb
                 featurespage.Title = "Features";
                 featurespage.Route = "/pagewide";
                 featurespage.SortOrder = 1;
-                
+
                 // Features hero
                 featurespage.Hero.Subtitle = "Features";
                 featurespage.Hero.Ingress = "<p>It's all about who has the sharpest teeth in the pond.</p>";
@@ -117,7 +130,7 @@ namespace MvcWeb
                     using (var reader = new StreamReader(stream))
                     {
                         var body = reader.ReadToEnd();
-                        
+
                         foreach (var section in body.Split("%"))
                         {
                             var blocks = section.Split("@");
@@ -140,7 +153,7 @@ namespace MvcWeb
                                         Column1 = App.Markdown.Transform(cols[0].Trim()),
                                         Column2 = App.Markdown.Transform(cols[1].Trim())
                                     });
-                                    
+
                                     if (n < blocks.Length - 1)
                                     {
                                         featurespage.Blocks.Add(new Models.Blocks.SeparatorBlock());

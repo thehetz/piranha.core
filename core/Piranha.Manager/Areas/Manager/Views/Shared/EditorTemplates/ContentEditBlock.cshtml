@@ -1,99 +1,77 @@
 @model Piranha.Areas.Manager.Models.ContentEditBlock
+@inject Piranha.IApi Api
 @{
     Layout = null;
-    bool isInGroup = ViewBag.IsInGroup != null ? ViewBag.IsInGroup : false;
+
     var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
-    Piranha.Runtime.AppBlock groupType = blockType;
-
-    if (ViewBag.GroupType != null)
-    {
-        groupType = ViewBag.GroupType;
-    }
 }
-<div class="block @(Model.IsGroup ? "block-group" : "")">
-    <div class="block-actions">
-        @if (!Model.IsGroup)
-        {
-            <span class="block-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
-        }
-        else
-        {
-            <button class="btn btn-secondary btn-sm block-expand"><span class="fas fa-angle-down"></span></button>
-        }
+
+@if (!Model.IsGroup)
+{
+    <div class="block">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CLRType)
+        @Html.HiddenFor(m => m.IsReusable)
+        @Html.HiddenFor(m => m.Value.Id)
+        <span class="block-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
         <div class="block-buttons">
-            <div class="btn btn-sm btn-secondary sortable-handle"><span class="fas fa-ellipsis-v"></span></div>
-            <button class="btn btn-sm btn-secondary block-remove"><i class="fas fa-trash"></i></button>
+            <div class="btn btn-sm btn-secondary sortable-handle" data-toggle="tooltip" data-placement="bottom" title="Move"><span class="fas fa-ellipsis-v"></span></div>
+            <button class="btn btn-sm btn-secondary block-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
-    </div>
-    @Html.HiddenFor(m => m.Id)
-    @Html.HiddenFor(m => m.CLRType)
-    @Html.HiddenFor(m => m.IsReusable)
-    @Html.HiddenFor(m => m.Value.Id)
-    @if (Model.IsGroup)
-    {
-        <div class="block-group-heading @(!blockType.UseCustomView ? "default" : "")">
-            <i class="@blockType.Icon group-icon"></i>
-            <h3 class="group-title">@blockType.Name</h3>
-            @if (blockType.UseCustomView) {
-                @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
-            }
-        </div>
-        <div class="block-group-info block-info">
-            <p>Expand the group to add or edit the items</p>
-        </div>
-        <div class="block-group-body">
-            <div class="unsortable">
-                <div class="block-add block-add-above">
-                    <div class="block-add-dialog">
-                        @foreach (var category in Piranha.App.Blocks.GetCategories()) {
-                            var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: false);
-
-                            if (blockType.ItemTypes.Count > 0) {
-                                items = items.Where(i => blockType.ItemTypes.Contains(i.Type));
-                            }
-                            items = items.Where(i => !i.IsUnlisted || blockType.ItemTypes.Contains(i.Type));
-
-                            if (items.Count() > 0) {
-                                <label>@category</label>
-                                @foreach (var block in items) {
-                                    <a href="#" data-typename="@block.TypeName" data-includegroups="false" data-grouptype="@blockType.TypeName"><i class="@block.Icon"></i>@block.Name</a>
-                                }
-                            }
-                        }
-                    </div>
-                    <a href="#" class="block-add-toggle">
-                        <hr><span class="fas fa-plus"></span>
-                    </a>
-                </div>
-            </div>
-            @for (var n = 0; n < Model.Items.Count(); n++)
-            {
-                @Html.EditorFor(m => m.Items[n], "ContentEditBlock", new { IsInGroup = true, GroupType = blockType })
-            }
-        </div>
-    } else {
         @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
-    }
-</div>
-<div class="block-add block-add-above" style="display:none">
-    <div class="block-add-dialog">
-        @foreach (var category in Piranha.App.Blocks.GetCategories()) {
-            var items = Piranha.App.Blocks.GetByCategory(category, includeGroups: !isInGroup);
-
-            if (isInGroup && groupType.ItemTypes.Count > 0) {
-                items = items.Where(i => groupType.ItemTypes.Contains(i.Type));
-            }
-            items = items.Where(i => !i.IsUnlisted || (isInGroup && groupType.ItemTypes.Contains(i.Type)));
-
-            if (items.Count() > 0) {
-                <label>@category</label>
-                @foreach (var block in items) {
-                    <a href="#" data-typename="@block.TypeName" data-includegroups="@(!isInGroup)" data-grouptype="@(isInGroup ? groupType.TypeName : "")"><i class="@block.Icon"></i>@block.Name</a>
-                }
-            }
-        }
     </div>
-    <a href="#" class="block-add-toggle">
-        <hr><span class="fas fa-plus"></span>
-    </a>
-</div>
+}
+else
+{
+    <div class="block block-group">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.CLRType)
+        @Html.HiddenFor(m => m.IsReusable)
+        @Html.HiddenFor(m => m.Value.Id)
+        <span class="block-label block-group-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
+        <div class="block-buttons">
+            <div class="btn btn-sm btn-secondary sortable-handle" data-toggle="tooltip" data-placement="bottom" title="Move"><span class="fas fa-ellipsis-v"></span></div>
+            <button class="btn btn-sm btn-secondary block-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
+        </div>
+        @{
+            var globalFields = Piranha.App.Blocks.GetByType(Model.Value.GetType()).Fields;
+        }
+        @if (globalFields.Count() > 0)
+        {
+            <div class="block-group-header">
+                @Html.EditorFor(m => m.Value)
+            </div>
+        }
+        <div class="row">
+            <div class="col-md-4 block-group-list">
+                <div class="list-group list-group-flush">
+                    @foreach (var item in Model.Items)
+                    {
+                        <a href="#" data-id="item_@item.Id" class="list-group-item @(item == Model.Items.First() ? "active" : "")">
+                            <div class="handle sortable-handle">
+                                <span class="fas fa-ellipsis-v"></span>
+                            </div>
+                            @Html.Raw(item.Value.GetTitle(Api))
+                        </a>
+                    }
+                </div>
+                <a href="#" class="btn btn-primary btn-sm btn-labeled" data-toggle="tooltip">
+                    <i class="fas fa-plus"></i>
+                    Add Item
+                </a>
+            </div>
+            <div class="col-md-8">
+                @for (var n = 0; n < Model.Items.Count; n++)
+                {
+                    <div id="item_@Model.Items[n].Id" class="block-group-item @(n > 0 ? "d-none" : "")">
+                        @Html.HiddenFor(m => m.Items[n].Id)
+                        @Html.HiddenFor(m => m.Items[n].CLRType)
+                        @Html.HiddenFor(m => m.Items[n].IsReusable)
+                        @Html.HiddenFor(m => m.Items[n].Value.Id)
+                        @Html.EditorFor(m => m.Items[n].Value, Model.Items[n].Value.GetType().Name)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

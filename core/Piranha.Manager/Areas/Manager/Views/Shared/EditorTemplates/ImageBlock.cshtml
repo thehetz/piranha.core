@@ -6,8 +6,13 @@
 }
 
 <div class="block-image">
-    @Html.HiddenFor(m => m.Body.Id)
     <img id="@(unique)_Preview" src="@(Model.Body.Media != null ? Url.Content(Model.Body.Media.PublicUrl) : "/manager/assets/img/empty-image.png")">
+    @if (Model.Body.Media != null)
+    {
+        <div class="block-image-filename">
+            @Model.Body.Media.Filename
+        </div>
+    }
     <div class="block-image-picker">
         @Html.HiddenFor(m => m.Body.Id)
         <div class="btn-group float-right" role="group">

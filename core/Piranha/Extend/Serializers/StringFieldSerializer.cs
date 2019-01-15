@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -21,11 +21,15 @@ namespace Piranha.Extend.Serializers
         /// <returns>The serialized value</returns>
         public string Serialize(object obj)
         {
-            if (obj is T field)
-            {
-                return field.Value;
-            }
-            throw new ArgumentException("The given object doesn't match the serialization type");
+            //if (obj != null)
+            //{
+                if (obj is T field)
+                {
+                    return field.Value;
+                }
+                throw new ArgumentException("The given object doesn't match the serialization type");
+            //}
+            //return null;
         }
 
         /// <summary>

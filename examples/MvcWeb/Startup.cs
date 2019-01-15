@@ -16,16 +16,16 @@ namespace MvcWeb
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(config => 
+            services.AddMvc(config =>
             {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
-            services.AddPiranhaEF(options => 
+            services.AddPiranhaEF(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
-            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options => 
+            services.AddPiranhaIdentityWithSeed<IdentitySQLiteDb>(options =>
                 options.UseSqlite("Filename=./piranha.mvcweb.db"));
             services.AddPiranhaManager();
 
@@ -49,6 +49,7 @@ namespace MvcWeb
 
             // Custom components
             App.Blocks.Register<Models.Blocks.SeparatorBlock>();
+            App.Blocks.Register<Models.Blocks.GalleryBlock>();
 
             // Build content types
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
@@ -67,7 +68,7 @@ namespace MvcWeb
             app.UseAuthentication();
             app.UsePiranha();
             app.UsePiranhaManager();
-            app.UseMvc(routes => 
+            app.UseMvc(routes =>
             {
                 routes.MapRoute(name: "areaRoute",
                     template: "{area:exists}/{controller}/{action}/{id?}",

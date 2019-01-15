@@ -69,7 +69,7 @@
             +.btn {
                 margin-top: 1rem;
             }
-    
+
             .list-group-item {
                 background: transparent;
                 border-color: $color_border;
@@ -98,16 +98,16 @@
                     height: 100%;
                     text-align: center;
                     border-right: solid 1px $color_border;
-                
+
                     span {
-                        color: $text_light;        
+                        color: $text_light;
                         position: absolute;
                         top: 50%;
                         margin-top: -.5rem;
                         font-size: 1rem;
                     }
                 }
-        
+
                 &.active {
                     background: $color_border;
                     color: $text_medium;
@@ -117,7 +117,7 @@
                         border-color: $bg_panel;
                     }
                 }
-        
+
                 &:hover {
                     .delete {
                         opacity: 1;
@@ -129,19 +129,27 @@
 
     .group-editor {
         background: $bg;
-        padding: 1.5rem 1.5rem;        
+        padding: 1.5rem 1.5rem;
         border: solid 1px #e4e4e4;
         border-radius: .25rem;
     }
 
+    // Image Block
     .block-image {
         background: $bg;
         border: solid 1px $color_border;
+        border-bottom: 0;
         padding: .5rem;
-        border-radius: .25rem;
 
         .block-image-filename {
             display: block;
         }
+    }
+
+    // Image Block caption
+    .form-control.image-caption {
+        padding: 0 .5rem .5rem;
+        border: solid 1px $color_border;
+        border-top: 0;
     }
 }

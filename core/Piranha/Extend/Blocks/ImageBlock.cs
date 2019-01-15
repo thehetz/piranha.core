@@ -26,6 +26,20 @@ namespace Piranha.Extend.Blocks
         /// <summary>
         /// Gets/sets the optional caption.
         /// </summary>
-        public TextField Caption { get; set; }
+        public StringField Caption { get; set; }
+
+        /// <summary>
+        /// Gets the list title if the block is used as
+        /// an item in a block group.
+        /// </summary>
+        /// <returns>The title</returns>
+        public override string GetTitle(IApi api)
+        {
+            if (Body.HasValue)
+            {
+                return Body.Media.Filename;
+            }
+            return "New image";
+        }
     }
 }

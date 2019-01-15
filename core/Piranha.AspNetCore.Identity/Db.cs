@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -103,7 +103,7 @@ namespace Piranha.AspNetCore.Identity
             }
 
             // Make sure our SysAdmin role has all of the available claims
-            //foreach (var claim in Piranha.Security.Permission.All()) 
+            //foreach (var claim in Piranha.Security.Permission.All())
             foreach (var permission in App.Permissions.GetPermissions())
             {
                 var roleClaim = RoleClaims.FirstOrDefault(c =>

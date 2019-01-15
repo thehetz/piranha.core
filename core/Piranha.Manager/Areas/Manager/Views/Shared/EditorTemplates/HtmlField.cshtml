@@ -1,5 +1,24 @@
 ﻿@model Piranha.Extend.Fields.HtmlField
+@{
+    var prefix = Html.ViewData.TemplateInfo.HtmlFieldPrefix
+        .Replace("[", "_").Replace("]", "_").Replace(".", "_");
+    var isEmpty = string.IsNullOrWhiteSpace(Model.Value);
+}
 
-<div class="region-editor">
+@if (ViewBag.IsBlock != null && ViewBag.IsBlock == true)
+{
+    <div class="group-editor">
+        @Html.HiddenFor(m => m.Value, "")
+        <div id="Editor_@Guid.NewGuid()" class="content-area block-editor editor-area @(isEmpty ? "empty" : "check-empty")" data-id="@(prefix)_Value" spellcheck="false">
+            @if (!isEmpty) {
+                @Html.Raw(Model.Value)
+            } else {
+                <p></p>
+            }
+        </div>
+    </div>
+}
+else
+{
     @Html.TextAreaFor(m => m.Value, new { @class = "editor", rows = 8 })
-</div>
+}

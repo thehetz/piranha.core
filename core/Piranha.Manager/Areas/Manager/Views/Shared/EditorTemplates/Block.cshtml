@@ -1,13 +1,9 @@
-@using Piranha.Extend;
-@using Piranha.Manager.Manager;
-@using System.Text.RegularExpressions;
-@model Block
+@model Piranha.Extend.Block
 
-@foreach(var name in Model.GetFieldNames())
+@foreach (var field in Piranha.App.Blocks.GetByType(Model.GetType()).Fields)
 {
-    var label = Regex.Replace(name, "(\\B[A-Z])", " $1");
     <div class="form-group">
-        <label>@label</label>
-        @Html.Editor(name)
+        <label>@field.DisplayName</label>
+        @Html.Editor(field.PropertyName, new { IsBlock = true })
     </div>
 }

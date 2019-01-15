@@ -585,6 +585,8 @@ namespace Piranha.Services
                         {
                             if (typeof(Extend.IField).IsAssignableFrom(prop.PropertyType))
                             {
+                                var value = prop.GetValue(models[n]);
+
                                 // Only save fields to the database
                                 var field = new BlockField()
                                 {
@@ -593,7 +595,7 @@ namespace Piranha.Services
                                     FieldId = prop.Name,
                                     SortOrder = 0,
                                     CLRType = prop.PropertyType.FullName,
-                                    Value = App.SerializeObject(prop.GetValue(models[n]), prop.PropertyType)
+                                    Value = value != null ? App.SerializeObject(value, prop.PropertyType) : null
                                 };
                                 block.Fields.Add(field);
                             }
