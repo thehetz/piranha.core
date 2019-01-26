@@ -3,22 +3,24 @@
 
 @if (Model.Items.Count > 0)
 {
-    if (!string.IsNullOrEmpty(Model.Title))
-    {
-        <h2>@Model.Title</h2>
-    }
-    if (!string.IsNullOrEmpty(Model.Description))
-    {
-        @Html.Raw(Model.Description)
-    }
-    <div class="row">
-        @foreach (var item in Model.Items)
+    <div class="gallery">
+        @if (!string.IsNullOrEmpty(Model.Title))
         {
-            var image = (ImageBlock)item;
-
-            <div class="col-sm">
-                <img class="img-thumbnail" src="@Url.Content(image.Body.Media.PublicUrl)">
-            </div>
+            <h2>@Model.Title</h2>
         }
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            @Html.Raw(Model.Description)
+        }
+        <div class="row">
+            @foreach (var item in Model.Items)
+            {
+                var image = (ImageBlock)item;
+
+                <div class="col-sm">
+                    <img class="img-thumbnail" src="@Url.Content(image.Body.Media.PublicUrl)">
+                </div>
+            }
+        </div>
     </div>
 }
