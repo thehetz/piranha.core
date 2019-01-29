@@ -31,6 +31,7 @@ var input = {
         "Assets/lib/simplemde/dist/simplemde.min.js",
         //"Assets/lib/object.assign-polyfill/object.assign.js",
         "Assets/js/html5sortable.js",
+        "Assets/js/piranha.accessibility.js",
         "Assets/js/piranha.notifications.js",
         "Assets/js/piranha.media.js",
         "Assets/js/piranha.page.js",

@@ -3,11 +3,12 @@
 @inject IAuthorizationService AuthorizationService
 @{
     var controller = ViewBag.Controller?.ToLower();
+    var menuindex = 0;
 }
 
 <div class="logo"></div>
 <ul class="navbar-nav">
-    @foreach (var group in Piranha.Manager.Menu.Items) 
+    @foreach (var group in Piranha.Manager.Menu.Items)
     {
         if (group.Items.Count > 0)
         {
@@ -16,12 +17,12 @@
                 @if (group.Items.Count > 0)
                 {
                     <ul>
-                        @foreach (var item in group.Items) 
+                        @foreach (var item in group.Items)
                         {
-                            if (string.IsNullOrWhiteSpace(item.Policy) || (await AuthorizationService.AuthorizeAsync(User, item.Policy)).Succeeded) 
+                            if (string.IsNullOrWhiteSpace(item.Policy) || (await AuthorizationService.AuthorizeAsync(User, item.Policy)).Succeeded)
                             {
                                 <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                                    <a href="@Url.Action(item.Action, item.Controller, item.Params)">
+                                    <a href="@Url.Action(item.Action, item.Controller, item.Params)" data-index="@(menuindex++)">
                                         @if (!string.IsNullOrEmpty(item.Css)) {
                                             <i class="@item.Css"></i>
                                         }
@@ -35,5 +36,5 @@
             </li>
         }
     }
-    <li><a class="header" href="@Url.Action("Logout", "Account")"><i class="fas fa-power-off"></i>Logout</a></li>
+    <li><a class="header" href="@Url.Action("Logout", "Account")" data-index="@(menuindex++)"><i class="fas fa-power-off"></i>Logout</a></li>
 </ul>
