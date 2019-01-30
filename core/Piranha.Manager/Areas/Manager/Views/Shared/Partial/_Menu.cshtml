@@ -22,7 +22,7 @@
                             if (string.IsNullOrWhiteSpace(item.Policy) || (await AuthorizationService.AuthorizeAsync(User, item.Policy)).Succeeded)
                             {
                                 <li @(item.Controller.ToLower() == controller ? "class=active" : "")>
-                                    <a href="@Url.Action(item.Action, item.Controller, item.Params)" data-index="@(menuindex++)">
+                                    <a href="@Url.Action(item.Action, item.Controller, item.Params)" tabindex="-1" data-index="@(menuindex++)">
                                         @if (!string.IsNullOrEmpty(item.Css)) {
                                             <i class="@item.Css"></i>
                                         }
@@ -36,5 +36,5 @@
             </li>
         }
     }
-    <li><a class="header" href="@Url.Action("Logout", "Account")" data-index="@(menuindex++)"><i class="fas fa-power-off"></i>Logout</a></li>
+    <li><a class="header" href="@Url.Action("Logout", "Account")" tabindex="-1" data-index="@(menuindex++)"><i class="fas fa-power-off"></i>Logout</a></li>
 </ul>

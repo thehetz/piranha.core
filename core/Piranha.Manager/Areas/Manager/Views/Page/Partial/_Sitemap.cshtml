@@ -1,6 +1,7 @@
 @model Piranha.Areas.Manager.Models.SitemapModel
 @{
     Layout = null;
+    var tabindex = 3;
 }
 
 @foreach (var item in Model.Sitemap) {
@@ -10,6 +11,8 @@
         PageId = Model.PageId,
         ExpandedLevels = Model.ExpandedLevels,
         CurrentLevel = 0,
-        ReadOnly = Model.ReadOnly
+        ReadOnly = Model.ReadOnly,
+        TabIndex = tabindex
     })
+    tabindex += 4;
 }

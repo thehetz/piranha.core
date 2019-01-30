@@ -37,11 +37,18 @@ piranha.media = new function() {
 
     self.load = function (e, folderId) {
         $.ajax({
-            url: baseUrl + "manager/media/modal/" + folderId + "?filter=" + self.mediaFilter,
+            url: piranha.baseUrl + "manager/media/modal/" + folderId + "?filter=" + self.mediaFilter,
             success: function (data) {
                 $("#modalMedia .modal-body").html(data);
                 self.currentFolder = folderId;
                 self.bindDropzone();
+
+                // Focus filter textbox
+                $("#media-search").focus().on("keypress", function(e) {
+                    if (e.keyCode == 13) {
+                        console.log("Enter pressed");
+                    }
+                });
             }
         });
     };
@@ -92,7 +99,7 @@ piranha.media = new function() {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
-                mediaUrlCtrl.attr("src", baseUrl + "/manager/assets/img/empty-image.png");
+                mediaUrlCtrl.attr("src", piranha.baseUrl + "manager/assets/img/empty-image.png");
             }
         }
     };

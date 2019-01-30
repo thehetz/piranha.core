@@ -96,7 +96,7 @@ piranha.blocks = new function() {
                         $(".blocks .block-type").remove();
 
                         // Add the new block at the requested position
-                        $(res).insertBefore($(".blocks .block").get(e.detail.destination.index));
+                        $(res).insertBefore($(".blocks .block-item").get(e.detail.destination.index));
 
                         // If the new region contains a html editor, make sure
                         // we initialize it.
@@ -116,6 +116,9 @@ piranha.blocks = new function() {
 
                         // Recalc form indexes
                         self.recalcBlocks();
+
+                        // Deactiveate the block panel
+                        $("#panelBlocks").removeClass("active");
                     }
                 });
             } else {
@@ -158,7 +161,7 @@ piranha.blocks = new function() {
      * moved or inserted in the UI.
      */
     self.recalcBlocks = function () {
-        var items = $(".body-content .blocks > .block");
+        var items = $(".body-content .blocks > .block-item .block");
 
         for (var n = 0; n < items.length; n++) {
             var inputs = $(items.get(n)).find("input, textarea, select");
@@ -231,7 +234,7 @@ piranha.blocks = new function() {
 
     $(document).on("click", ".block-remove", function (e) {
         e.preventDefault();
-        self.removeBlock($(this).closest(".block"));
+        self.removeBlock($(this).closest(".block-item"));
     });
 
     $(document).on("focus", ".block .empty", function () {
@@ -240,7 +243,8 @@ piranha.blocks = new function() {
     });
 
     $(document).on("blur", ".block .check-empty", function () {
-        if (piranha.tools.isEmpty(this)) {
+        //if (piranha.tools.isEmpty(this)) {
+        if (manager.tools.isEmpty(this)) {
             $(this).removeClass("check-empty");
             $(this).addClass("empty");
         }

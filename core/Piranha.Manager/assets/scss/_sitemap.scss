@@ -4,18 +4,23 @@ ol.sitemap {
     padding-left: 0;
 
 	.actions {
+		padding: .5rem;
 		text-align: right;
 
 		&.one {
-			width: 65px;
+			width: 40px;
 		}
 
 		&.two {
-			width: 95px;
+			width: 70px;
 		}
 
 		&.three {
-			width: 115px;
+			width: 100px;
+		}
+
+		a {
+			float: left;
 		}
 	}
 
@@ -24,7 +29,6 @@ ol.sitemap {
 			list-style-type: none;
 		}
 
-        //background: $color_border;
         font-family: "Open Sans", Arial;
         font-weight: bold;
         text-transform: uppercase;
@@ -48,6 +52,13 @@ ol.sitemap {
 
 li.sitemap-item {
 	list-style-type: none;
+
+	&:focus-within {
+		.dd-handle, .dd-toggle, .actions, .content {
+			background: $color_drop;
+		}
+	}
+
 
 	a {
 		padding: 10px 8px;
@@ -162,21 +173,7 @@ li.sitemap-item {
 
     .actions {
         a {
-            display: block;
-            font-size: 14px;
-			margin-top: 2px;
-			padding: 10px;
-			float: left;
-
-			&.add-after, &.add-below {
-				font-size: 16px;
-				line-height: 14px;
-				padding-top: 12px;
-			}
+			padding: 0;
         }
-
-        &.one {
-            width: 60px;
-        }
-    }
+	}
 }

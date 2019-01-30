@@ -260,8 +260,6 @@
 
     <div class="form-dimmer"></div>
 
-    <h1 style="display:none">@ViewBag.Title</h1>
-
     <div class="top">
         <div class="top-nav">
             <nav>
@@ -288,11 +286,9 @@
                         </button>
                     </li>
                     <li>
-                        <!--<div id="btnActions" class="btn-group" role="group">-->
-                            <button id="main-submit" type="submit" class="btn btn-sm btn-success">
-                                <i class="fas fa-check"></i>
-                            </button>
-                        <!--</div>-->
+                        <button id="main-submit" type="submit" class="btn btn-sm btn-success">
+                            <i class="fas fa-check"></i>
+                        </button>
                     </li>
                     <li>
                         <button id="btnActions" type="button" class="btn btn-sm btn-labeled btn-primary btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -355,8 +351,9 @@
     }
 
     <div class="body-content">
-        <div class="form-group">
-            @Html.TextBoxFor(m => m.Title, new { @class = "title", maxlength = 128, placeholder = "Your page title" })
+        <div class="block title-block">
+            <span class="block-label">Title</span>
+            @Html.TextBoxFor(m => m.Title, new { @class = "title", rows = 1, maxlength = 128, placeholder = "Your page title" })
             @Html.ValidationMessageFor(m => m.Title)
         </div>
 

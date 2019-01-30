@@ -6,6 +6,7 @@
     var blockType = Piranha.App.Blocks.GetByType(Model.CLRType);
 }
 
+<div class="block-item">
 @if (!Model.IsGroup)
 {
     <div class="block">
@@ -16,7 +17,7 @@
         <span class="block-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
         <div class="block-buttons">
             <div class="btn btn-sm btn-secondary sortable-handle" data-toggle="tooltip" data-placement="bottom" title="Move"><span class="fas fa-ellipsis-v"></span></div>
-            <button class="btn btn-sm btn-secondary block-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-secondary block-remove" tabindex="-1" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
         @Html.EditorFor(m => m.Value, Model.Value.GetType().Name)
     </div>
@@ -31,7 +32,7 @@ else
         <span class="block-label block-group-label"><i class="@blockType.Icon"></i>@blockType.Name</span>
         <div class="block-buttons">
             <div class="btn btn-sm btn-secondary sortable-handle" data-toggle="tooltip" data-placement="bottom" title="Move"><span class="fas fa-ellipsis-v"></span></div>
-            <button class="btn btn-sm btn-secondary block-remove" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-sm btn-secondary block-remove" tabindex="-1" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash"></i></button>
         </div>
         @{
             var globalFields = Piranha.App.Blocks.GetByType(Model.Value.GetType()).Fields;
@@ -75,3 +76,8 @@ else
         </div>
     </div>
 }
+<a href="#" data-toggle="panel" data-target="#panelBlocks" class="block-add">
+    <i class="fas fa-plus-circle"></i>
+    <div class="block-placeholder"></div>
+</a>
+</div>

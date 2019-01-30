@@ -1,5 +1,8 @@
 @import "colors";
 
+//
+// Basic buttons
+//
 .btn {
     &.btn-primary, &.btn-primary.dropdown-toggle {
         background-color: $color_link;
@@ -21,5 +24,45 @@
 
     &.btn-icon {
         width: 32px;
+    }
+}
+
+//
+// Action buttons in lists and tables
+//
+.actions {
+    a {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px;
+        border-radius: .25rem;
+        transition: all ease-in-out .2s;
+
+        i {
+            color: $color_link;
+            transition: color ease-out .2s;
+        }
+
+        &.remove {
+            i {
+                color: #dc3545;
+            }
+
+            &:hover, &:focus {
+                background: #dc3545;
+            }
+        }
+
+        &:hover, &:focus {
+            background: $color_link;
+            outline: none;
+            box-shadow: 0 2px 1px rgba(0,0,0,.3);
+
+            i {
+                color: $bg_main;
+            }
+        }
     }
 }

@@ -3,9 +3,9 @@
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
-// 
+//
 
 /*global
     piranha, baseUrl
@@ -42,7 +42,7 @@ piranha.post = new function() {
         }
 
         $.ajax({
-            url: baseUrl + "manager/post/modal" + (site ? "/" + site + (blog ? "/" + blog : "") : ""),
+            url: piranha.baseUrl + "manager/post/modal" + (site ? "/" + site + (blog ? "/" + blog : "") : ""),
             success: function(data) {
                 $("#modalPost .modal-body").html(data);
             }

@@ -88,7 +88,7 @@ $(document).ready(function() {
         $(this).parent().removeClass("active");
     });
 
-    $("[data-toggle='panel']").click(function (e) {
+    $(document).on('click', "[data-toggle='panel']", function (e) {
         e.preventDefault();
 
         var panel = $($(this).attr("data-target"));
@@ -245,9 +245,9 @@ $(document).on("click",
         var url = data.posturl || $(this).attr("href");
         var $modal =
             $(
-                    '<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title">' +
+                    '<div class="modal" tabindex="-1" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">' +
                     title +
-                    '</h4></div><div class="modal-body">' +
+                    '</h5></div><div class="modal-body">' +
                     message +
                     '</div><div class="modal-footer"><form method="post" class="form-delete" style="display:inline;" action="' +
                     url +

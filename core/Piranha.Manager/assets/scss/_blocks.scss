@@ -140,7 +140,7 @@
             display: none;
         }
 
-		&:hover {
+		&:hover, &:focus-within {
 			.block-image-picker {
 				opacity: 1;
 				transition: opacity ease-in-out 0.2s;
@@ -169,13 +169,66 @@
         }
     }
 
-    &:hover {
+    &:hover, &:focus-within {
         border-color: $color_border;
         transition: border-color .2s ease-in-out;
 
         .block-label, .block-buttons, .block-extras {
             opacity: 1;
             transition: opacity .2s ease-in-out;
+        }
+    }
+}
+
+.block-add {
+    display: block;
+    position: relative;
+    height: 10px;
+    background-color: $bg_main;
+    margin-bottom: 2px;
+    border-color: $bg;
+    border-style: solid;
+    border-width: 2px 0 6px;
+    transition: all ease-in-out .2s;
+
+    i {
+        background: $bg;
+        color: $bg_main;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -18px;
+        margin-left: -18px;
+        font-size: 28px;
+        border: solid 4px $bg;;
+        border-radius: 50%;
+        z-index: 1000;
+        transition: color ease-in-out .2s;
+    }
+
+    &:hover, &:focus-within, .active {
+        background-color: $text_medium;
+        outline: 0;
+
+        i {
+            color: $text_medium;
+        }
+    }
+
+    .block-placeholder {
+        background: #f2fbff;
+        height: 0;
+        border: 1px dashed #fff;
+        margin: 1.25rem 1rem 1rem;
+        transition: all ease-in-out .2s;
+    }
+
+    &.active {
+        margin-bottom: 118px;
+
+        .block-placeholder {
+            height: 100px;
+            border: 1px dashed #b6bcbf;
         }
     }
 }
@@ -190,7 +243,7 @@
 
 .block-type {
     display: inline-block;
-    width: 32%;
+    width: 24%;
     margin-bottom: .5rem;
 
     a {
@@ -220,6 +273,13 @@
             font-size: 1.5rem;
             height: 2rem;
             transition: color .2s ease-in-out;
+        }
+
+        span {
+            display: block;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Piranha.Models;
@@ -46,5 +46,7 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets if the model is readonly for modals.
         /// </summary>
         public bool ReadOnly { get; set; }
-    }    
+
+        public int TabIndex { get; set; }
+    }
 }

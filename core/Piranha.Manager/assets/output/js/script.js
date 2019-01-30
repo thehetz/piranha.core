@@ -26150,6 +26150,10 @@ var sortable = (function () {
 // Accessibility features
 //
 
+/*global
+    tinymce
+ */
+
 //
 // Keyboard Shortcuts
 //
@@ -26159,10 +26163,41 @@ $(window).on("keydown", function (e) {
     // Function key
     if (e.altKey) {
         // Pressed 'm', toggle menu
-        if (e.keyCode == 77) {
+        if (e.keyCode === 77) {
             e.preventDefault();
             menu.toggleClass("active");
             menu.find(".active a").focus();
+        }
+        // Pressed backspace, check for focused block
+        else if (e.keyCode === 8) {
+            var block = $(":focus").parents(".block:not(.title-block)");
+
+            if (block.length === 1) {
+                console.log("Remove focused block");
+
+                // Check if we have an active editor
+                if (tinymce) {
+                    var editor = tinymce.activeEditor;
+
+                    if (editor && editor.inline) {
+                        console.log("Destroying active editor");
+                        editor.destroy();
+                    }
+                }
+
+                // Remove focused block
+                block.find(".block-remove").click();
+            }
+        }
+    }
+
+    // Escape key
+    if (e.keyCode === 27) {
+        var panels = $(".panel.active");
+
+        if (panels.length > 0) {
+            panels.removeClass("active");
+            $(":focus").blur();
         }
     }
 
@@ -26170,9 +26205,11 @@ $(window).on("keydown", function (e) {
     else if (menu.hasClass("active")) {
         var activeIndex = parseInt($(":focus").attr("data-index"));
 
-        if (e.keyCode == 38) {
+        if (e.keyCode === 38) {
+            e.preventDefault();
             menu.find("a[data-index='" + (activeIndex - 1) + "']").focus();
-        } else if (e.keyCode == 40) {
+        } else if (e.keyCode === 40) {
+            e.preventDefault();
             menu.find("a[data-index='" + (activeIndex + 1) + "']").focus();
         }
     }
@@ -26451,11 +26488,18 @@ piranha.media = new function() {
 
     self.load = function (e, folderId) {
         $.ajax({
-            url: baseUrl + "manager/media/modal/" + folderId + "?filter=" + self.mediaFilter,
+            url: piranha.baseUrl + "manager/media/modal/" + folderId + "?filter=" + self.mediaFilter,
             success: function (data) {
                 $("#modalMedia .modal-body").html(data);
                 self.currentFolder = folderId;
                 self.bindDropzone();
+
+                // Focus filter textbox
+                $("#media-search").focus().on("keypress", function(e) {
+                    if (e.keyCode == 13) {
+                        console.log("Enter pressed");
+                    }
+                });
             }
         });
     };
@@ -26506,7 +26550,7 @@ piranha.media = new function() {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
             if (mediaUrlCtrl.prop("tagName") == "IMG") {
-                mediaUrlCtrl.attr("src", baseUrl + "/manager/assets/img/empty-image.png");
+                mediaUrlCtrl.attr("src", piranha.baseUrl + "manager/assets/img/empty-image.png");
             }
         }
     };
@@ -26631,9 +26675,9 @@ $(document).on("show.bs.modal","#modalImgPreview", function (event) {
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
-// 
+//
 
 /*global
     piranha, baseUrl
@@ -26666,7 +26710,7 @@ piranha.page = new function() {
         }
 
         $.ajax({
-            url: baseUrl + "manager/page/modal" + (site ? "/" + site : ""),
+            url: piranha.baseUrl + "manager/page/modal" + (site ? "/" + site : ""),
             success: function(data) {
                 $("#modalPage .modal-body").html(data);
             }
@@ -26757,9 +26801,9 @@ $(document).on("show.bs.modal",
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
-// 
+//
 // http://github.com/piranhacms/piranha.core
-// 
+//
 
 /*global
     piranha, baseUrl
@@ -26796,7 +26840,7 @@ piranha.post = new function() {
         }
 
         $.ajax({
-            url: baseUrl + "manager/post/modal" + (site ? "/" + site + (blog ? "/" + blog : "") : ""),
+            url: piranha.baseUrl + "manager/post/modal" + (site ? "/" + site + (blog ? "/" + blog : "") : ""),
             success: function(data) {
                 $("#modalPost .modal-body").html(data);
             }
@@ -26971,7 +27015,7 @@ piranha.blocks = new function() {
                         $(".blocks .block-type").remove();
 
                         // Add the new block at the requested position
-                        $(res).insertBefore($(".blocks .block").get(e.detail.destination.index));
+                        $(res).insertBefore($(".blocks .block-item").get(e.detail.destination.index));
 
                         // If the new region contains a html editor, make sure
                         // we initialize it.
@@ -26991,6 +27035,9 @@ piranha.blocks = new function() {
 
                         // Recalc form indexes
                         self.recalcBlocks();
+
+                        // Deactiveate the block panel
+                        $("#panelBlocks").removeClass("active");
                     }
                 });
             } else {
@@ -27033,7 +27080,7 @@ piranha.blocks = new function() {
      * moved or inserted in the UI.
      */
     self.recalcBlocks = function () {
-        var items = $(".body-content .blocks > .block");
+        var items = $(".body-content .blocks > .block-item .block");
 
         for (var n = 0; n < items.length; n++) {
             var inputs = $(items.get(n)).find("input, textarea, select");
@@ -27106,7 +27153,7 @@ piranha.blocks = new function() {
 
     $(document).on("click", ".block-remove", function (e) {
         e.preventDefault();
-        self.removeBlock($(this).closest(".block"));
+        self.removeBlock($(this).closest(".block-item"));
     });
 
     $(document).on("focus", ".block .empty", function () {
@@ -27115,7 +27162,8 @@ piranha.blocks = new function() {
     });
 
     $(document).on("blur", ".block .check-empty", function () {
-        if (piranha.tools.isEmpty(this)) {
+        //if (piranha.tools.isEmpty(this)) {
+        if (manager.tools.isEmpty(this)) {
             $(this).removeClass("check-empty");
             $(this).addClass("empty");
         }
@@ -27229,7 +27277,7 @@ $(document).ready(function() {
         $(this).parent().removeClass("active");
     });
 
-    $("[data-toggle='panel']").click(function (e) {
+    $(document).on('click', "[data-toggle='panel']", function (e) {
         e.preventDefault();
 
         var panel = $($(this).attr("data-target"));
@@ -27386,9 +27434,9 @@ $(document).on("click",
         var url = data.posturl || $(this).attr("href");
         var $modal =
             $(
-                    '<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title">' +
+                    '<div class="modal" tabindex="-1" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">' +
                     title +
-                    '</h4></div><div class="modal-body">' +
+                    '</h5></div><div class="modal-body">' +
                     message +
                     '</div><div class="modal-footer"><form method="post" class="form-delete" style="display:inline;" action="' +
                     url +

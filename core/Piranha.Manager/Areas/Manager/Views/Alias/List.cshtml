@@ -27,9 +27,9 @@
                 @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.AliasesEdit)).Succeeded)
                 {
                     <li>
-                        <a href="#" class="btn btn-sm btn-labeled btn-primary" data-toggle="panel" data-target="#panelAlias">
+                        <button class="btn btn-sm btn-labeled btn-primary" data-toggle="panel" data-target="#panelAlias">
                             <i class="fas fa-plus"></i>Add
-                        </a>
+                        </button>
                     </li>
                 }
             </ul>

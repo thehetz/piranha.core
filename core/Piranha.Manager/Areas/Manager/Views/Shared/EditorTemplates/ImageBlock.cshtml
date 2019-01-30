@@ -17,7 +17,7 @@
         @Html.HiddenFor(m => m.Body.Id)
         <div class="btn-group float-right" role="group">
             <div class="btn-group" role="group">
-                <button class="btn btn-primary text-center btn-media-select" type="button" data-filter="image" data-mediaid="@(prefix)_Body_Id" data-medianame="@(unique)_Filename" data-mediaurlid="@(unique)_Preview">
+                <button class="btn btn-primary text-center btn-media-select" type="button" data-toggle="modal" data-target="#modalMedia" data-filter="image" data-mediaid="@(prefix)_Body_Id" data-medianame="@(unique)_Filename" data-mediaurlid="@(unique)_Preview">
                     <span class="fas fa-plus"></span>
                 </button>
             </div>
@@ -29,7 +29,7 @@
         </div>
         <div class="card text-left image-field">
             <div class="card-body">
-                <a id="@(unique)_Filename" href="#" data-toggle="modal">
+                <a id="@(unique)_Filename" tabindex="-1" href="#" data-toggle="modal">
                     @if (Model.Body.Media != null)
                     {
                         @Model.Body.Media.Filename

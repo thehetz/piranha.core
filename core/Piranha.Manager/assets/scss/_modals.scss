@@ -1,7 +1,65 @@
+@import "colors";
+
 .modal-backdrop {
     z-index: 67100;
 }
 
 .modal {
     z-index: 67200;
+
+    &.modal-panel {
+        left: inherit;
+        bottom: inherit;
+        height: 100%;
+
+        .modal-dialog {
+            margin: 0;
+            height: 100%;
+
+            .modal-content {
+                background: $bg_main;
+                min-height: 100%;
+                border-color: #fff;
+                border-width: 0 0 0 4px;
+                border-radius: 0;
+            }
+
+            .modal-header {
+                display: block;
+                border-bottom: 0;
+
+                .modal-title {
+                    font-size: .8rem;
+                    text-transform: uppercase;
+                    font-weight: 700;
+                    padding-top: .5rem;
+                }
+            }
+
+            .modal-body {
+                padding-top: 0;
+            }
+
+            &.modal-md {
+                width: 500px;
+            }
+            &.modal-lg {
+                width: 800px;
+            }
+        }
+
+        .table.table-media .text-limit-cell {
+            padding-left: 1.25rem;
+        }
+
+        &.slide {
+            transform: translateX(100%);
+            transition: all ease-in-out .2s;
+            display: block !important;
+
+            &.show {
+                transform: translateX(0);
+            }
+        }
+    }
 }
