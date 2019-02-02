@@ -244,7 +244,7 @@ piranha.blocks = new function() {
 
     $(document).on("blur", ".block .check-empty", function () {
         //if (piranha.tools.isEmpty(this)) {
-        if (manager.tools.isEmpty(this)) {
+        if (manager.tools.isempty(this)) {
             $(this).removeClass("check-empty");
             $(this).addClass("empty");
         }

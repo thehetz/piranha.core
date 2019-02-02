@@ -184,12 +184,16 @@
     display: block;
     position: relative;
     height: 10px;
-    background-color: $bg_main;
-    margin-bottom: 2px;
-    border-color: $bg;
-    border-style: solid;
-    border-width: 2px 0 6px;
+    padding: 12px 0;
+    margin: 6px 0;
     transition: all ease-in-out .2s;
+
+    hr {
+        margin: 0;
+        border-top-width: 2px;
+        border-color: $bg_main;
+        transition: border-color ease-in-out .2s;
+    }
 
     i {
         background: $bg;
@@ -207,8 +211,11 @@
     }
 
     &:hover, &:focus-within, .active {
-        background-color: $text_medium;
         outline: 0;
+
+        hr {
+            border-color: $text_medium;
+        }
 
         i {
             color: $text_medium;

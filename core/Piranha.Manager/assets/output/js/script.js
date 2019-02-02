@@ -26497,7 +26497,13 @@ piranha.media = new function() {
                 // Focus filter textbox
                 $("#media-search").focus().on("keypress", function(e) {
                     if (e.keyCode == 13) {
-                        console.log("Enter pressed");
+                        var  result = $("#media-table tbody tr:visible");
+
+                        if (result.length == 1) {
+                            // There's only a single media file left in
+                            // the result list, let's click it
+                            result.find("a").click();
+                        }
                     }
                 });
             }
@@ -27163,7 +27169,7 @@ piranha.blocks = new function() {
 
     $(document).on("blur", ".block .check-empty", function () {
         //if (piranha.tools.isEmpty(this)) {
-        if (manager.tools.isEmpty(this)) {
+        if (manager.tools.isempty(this)) {
             $(this).removeClass("check-empty");
             $(this).addClass("empty");
         }

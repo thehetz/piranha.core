@@ -46,7 +46,13 @@ piranha.media = new function() {
                 // Focus filter textbox
                 $("#media-search").focus().on("keypress", function(e) {
                     if (e.keyCode == 13) {
-                        console.log("Enter pressed");
+                        var  result = $("#media-table tbody tr:visible");
+
+                        if (result.length == 1) {
+                            // There's only a single media file left in
+                            // the result list, let's click it
+                            result.find("a").click();
+                        }
                     }
                 });
             }
