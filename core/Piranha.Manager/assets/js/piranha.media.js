@@ -45,7 +45,7 @@ piranha.media = new function() {
 
                 // Focus filter textbox
                 $("#media-search").focus().on("keypress", function(e) {
-                    if (e.keyCode == 13) {
+                    if (e.keyCode === 13) {
                         var  result = $("#media-table tbody tr:visible");
 
                         if (result.length === 1) {
@@ -72,7 +72,7 @@ piranha.media = new function() {
             if (self.mediaUrlId) {
                 var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
-                if (mediaUrlCtrl.prop("tagName") == "IMG") {
+                if (mediaUrlCtrl.prop("tagName") === "IMG") {
                     mediaUrlCtrl.attr("src", e.data("url"));
                 } else {
                     mediaUrlCtrl.val(e.data("url"));
@@ -104,7 +104,7 @@ piranha.media = new function() {
         if (self.mediaUrlId) {
             var mediaUrlCtrl = $("#" + self.mediaUrlId);
 
-            if (mediaUrlCtrl.prop("tagName") == "IMG") {
+            if (mediaUrlCtrl.prop("tagName") === "IMG") {
                 mediaUrlCtrl.attr("src", piranha.baseUrl + "manager/assets/img/empty-image.png");
             }
         }
@@ -127,7 +127,7 @@ piranha.media = new function() {
 $(document).on("click", "#modalMedia .modal-body a", function () {
     var button = $(this);
 
-    if (button.data("type") == "folder") {
+    if (button.data("type") === "folder") {
         piranha.media.load(button, button.data("folderid"), button.data("filter"));
     } else {
         piranha.media.set(button);
@@ -153,9 +153,6 @@ $(document).on("submit", "#modalMedia form", function (e) {
             $("#modalMedia .modal-body").html(data);
         },
         error: function (a, b, c) {
-            console.log(a)
-            console.log(b)
-            console.log(c)
         }
     });
 });
@@ -175,7 +172,7 @@ $(document).on("show.bs.modal","#modalMedia", function (event) {
         piranha.media.initCallback();
         piranha.media.initCallback = null;
     }
-    piranha.media.load($(event.relatedTarget), '');
+    piranha.media.load($(event.relatedTarget), "");
 });
 
 $(document).on("show.bs.modal","#modalImgPreview", function (event) {
@@ -197,9 +194,11 @@ $(document).on("show.bs.modal","#modalImgPreview", function (event) {
     modal.find("#previewId").val(id);
     modal.find("#previewParentId").val(parentid);
 
-    if (!id || id == "")
+    if (!id || id === "") {
         modal.find(".fileinput").hide();
-    else modal.find(".fileinput").show();
+    } else {
+        modal.find(".fileinput").show();
+    }
 
     if (contenttype.startsWith("image")) {
         modal.find("#previewImage").show();
