@@ -48,7 +48,7 @@ piranha.media = new function() {
                     if (e.keyCode == 13) {
                         var  result = $("#media-table tbody tr:visible");
 
-                        if (result.length == 1) {
+                        if (result.length === 1) {
                             // There's only a single media file left in
                             // the result list, let's click it
                             result.find("a").click();
