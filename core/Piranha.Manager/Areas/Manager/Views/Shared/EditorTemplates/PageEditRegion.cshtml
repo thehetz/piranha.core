@@ -30,11 +30,11 @@
                         }
                         @if (Model.FieldSet[n].Value.GetType().IsGenericType)
                         {
-                            @Html.EditorFor(m => m.FieldSet[n].Value, Model.FieldSet[n].Value.GetType().BaseType.Name, new { Placeholder = Model.FieldSet[n].Placeholder })
+                            @Html.EditorFor(m => m.FieldSet[n].Value, Model.FieldSet[n].Value.GetType().BaseType.Name, new { Placeholder = Model.FieldSet[n].Placeholder, Focus = n == 0 })
                         }
                         else
                         {
-                            @Html.EditorFor(m => m.FieldSet[n].Value, Model.FieldSet[n].Value.GetType().Name, new { Placeholder = Model.FieldSet[n].Placeholder })
+                            @Html.EditorFor(m => m.FieldSet[n].Value, Model.FieldSet[n].Value.GetType().Name, new { Placeholder = Model.FieldSet[n].Placeholder, Focus = n == 0 })
                         }
                     </div>
                 </div>

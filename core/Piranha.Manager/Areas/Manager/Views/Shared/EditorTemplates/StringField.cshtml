@@ -1,6 +1,7 @@
 ﻿@model Piranha.Extend.Fields.StringField
 @{
     var placeholder = ViewData["Placeholder"];
+    var focus = ViewData["Focus"] != null ? (bool)ViewData["Focus"] : false;
 }
 
-@Html.TextBoxFor(m => m.Value, new { @class = "form-control small", placeholder = placeholder })
+@Html.TextBoxFor(m => m.Value, new { @class = "form-control small " + (focus ? "autofocus" : ""), placeholder = placeholder })

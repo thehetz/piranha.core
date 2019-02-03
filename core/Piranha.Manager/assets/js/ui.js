@@ -86,12 +86,21 @@ $(document).ready(function() {
 
     $(".panel-close").click(function() {
         $(this).parent().removeClass("active");
+
+        // Reset focus
+        if (piranha.prevFocus) {
+            piranha.prevFocus.focus();
+            piranha.prevFocus = null;
+        }
     });
 
     $(document).on('click', "[data-toggle='panel']", function (e) {
         e.preventDefault();
 
         var panel = $($(this).attr("data-target"));
+
+        // Store return focus
+        piranha.prevFocus = $($(this).attr("data-focus"));
 
         // Set autofocus
         panel.find(".autofocus").focus();

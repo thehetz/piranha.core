@@ -49,7 +49,13 @@ $(window).on("keydown", function (e) {
 
         if (panels.length > 0) {
             panels.removeClass("active");
-            $(":focus").blur();
+
+            if (piranha.prevFocus) {
+                piranha.prevFocus.focus();
+                piranha.prevFocus = null;
+            } else {
+                $(":focus").blur();
+            }
         }
     }
 
