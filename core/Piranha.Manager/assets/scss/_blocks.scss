@@ -211,7 +211,7 @@
         transition: color ease-in-out .2s;
     }
 
-    &:hover, &:focus-within, .active {
+    &:hover, &:focus-within, &.active {
         width: 100%;
         outline: 0;
 

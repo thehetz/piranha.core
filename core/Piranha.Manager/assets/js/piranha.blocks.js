@@ -20,6 +20,8 @@ piranha.blocks = new function() {
 
     var self = this;
 
+    self.selectedIndex = null;
+
     /**
      * Initializes the block component.
      */
@@ -82,6 +84,9 @@ piranha.blocks = new function() {
                 // New block dropped in block list, create and
                 // insert editor view.
                 //
+                self.insertBlock(item, e.detail.destination.index);
+
+                /*
                 $.ajax({
                     url: piranha.baseUrl + "manager/block/create",
                     method: "POST",
@@ -121,9 +126,64 @@ piranha.blocks = new function() {
                         $("#panelBlocks").removeClass("active");
                     }
                 });
+                */
             } else {
                 // Recalc form indexes
                 self.recalcBlocks();
+            }
+        });
+    };
+
+    self.insertBlock = function (item, index) {
+        $.ajax({
+            url: piranha.baseUrl + "manager/block/create",
+            method: "POST",
+            contentType: "application/json",
+            dataType: "html",
+            data: JSON.stringify({
+                TypeName: $(item).data("typename"),
+                BlockIndex: index
+            }),
+            success: function (res) {
+                // Remove the block-type container
+                $(".blocks .block-type").remove();
+
+                // Add the new block at the requested position
+                $(res).insertBefore($(".blocks .block-item").get(index));
+
+                // If the new region contains a html editor, make sure
+                // we initialize it.
+                var editors = $(res).find(".block-editor").each(function () {
+                    addInlineEditor("#" + this.id);
+                });
+
+                // Update the sortable list
+                sortable(".blocks", {
+                    handle: ".sortable-handle",
+                    items: ":not(.unsortable)",
+                    acceptFrom: ".blocks,.block-types"
+                });
+
+                // Unhide
+                $(".blocks .loading").removeClass("loading");
+
+                // Recalc form indexes
+                self.recalcBlocks();
+
+                // Deactiveate the block panel
+                $("#panelBlocks").removeClass("active");
+                $(".block-add.active").removeClass("active");
+
+                // Clear selected index
+                self.selectedIndex = null;
+
+                // Reset focus
+                if (piranha.prevFocus) {
+                    piranha.prevFocus.focus();
+                    piranha.prevFocus = null;
+                } else {
+                    $(":focus").blur();
+                }
             }
         });
     };
@@ -232,6 +292,42 @@ piranha.blocks = new function() {
         }
     };
 
+    self.filter = function (str) {
+        var toLower = str.toLowerCase();
+
+        if (toLower != "") {
+            $.each($("#panelBlocks .block-type"),
+            function(i, e) {
+                var blockType = $(e);
+                var name = blockType.find("span").text().toLowerCase();
+
+                if (name.includes(toLower)) {
+                    blockType.show();
+                } else {
+                    blockType.hide();
+                }
+            });
+            $("#panelBlocks .block-category").hide();
+        } else {
+            $("#panelBlocks .block-category, #panelBlocks .block-type").show();
+        }
+
+    };
+
+    $(document).on("click", ".block-type a", function (e) {
+        e.preventDefault();
+
+        if (self.selectedIndex != null) {
+            self.insertBlock($(this).parent(), self.selectedIndex + 1);
+        }
+    });
+
+    $(document).on("click", ".block-add", function (e) {
+        var block = $(this).closest(".block-item");
+        self.selectedIndex = $(this).closest(".blocks").find(".block-item").index(block);
+        $(this).addClass("active");
+    });
+
     $(document).on("click", ".block-remove", function (e) {
         e.preventDefault();
         self.removeBlock($(this).closest(".block-item"));
@@ -267,4 +363,12 @@ piranha.blocks = new function() {
             $(columns[1]).html(col1);
         }
     });
+
+    $(document).on("keyup",
+        "#block-search",
+        function(e) {
+            e.preventDefault();
+
+            self.filter($("#block-search").val());
+        });
 };

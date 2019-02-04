@@ -2,6 +2,9 @@
     <span class="panel-title">Create Block</span>
     <div class="panel-body block-types">
         <div class="panel-handle unsortable"><i class="fas fa-ellipsis-v"></i></div>
+        <div class="form-group unsortable">
+            <input id="block-search" class="form-control input-block search-field autofocus">
+        </div>
         @foreach (var category in Piranha.App.Blocks.GetCategories()) {
             var items = Piranha.App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
 
@@ -9,7 +12,7 @@
             @foreach (var block in items)
             {
                 <div class="block-type" data-typename="@block.TypeName">
-                    <a href="#" ><i class="@block.Icon"></i><span>@block.Name</span></a>
+                    <a href="#"><i class="@block.Icon"></i><span>@block.Name</span></a>
                 </div>
             }
         }

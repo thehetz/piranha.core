@@ -86,6 +86,7 @@ $(document).ready(function() {
 
     $(".panel-close").click(function() {
         $(this).parent().removeClass("active");
+        $(".block-add.active").removeClass("active");
 
         // Reset focus
         if (piranha.prevFocus) {
@@ -515,6 +516,8 @@ var manager = {
         },
 
         tablesort: function(table, status, type, category, search) {
+            var toLower = search.toLowerCase();
+
             $.each($(table).find("tr"),
                 function(i, e) {
                     if (i > 0) {
@@ -528,7 +531,7 @@ var manager = {
                         if (category != "" && category != row.data().category)
                             show = false;
                         if (search != "") {
-                            if (!row.first("td").text().toLowerCase().includes(search))
+                            if (!row.first("td").text().toLowerCase().includes(toLower))
                                 show = false;
                         }
 

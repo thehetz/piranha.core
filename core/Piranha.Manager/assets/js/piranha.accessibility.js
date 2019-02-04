@@ -49,6 +49,7 @@ $(window).on("keydown", function (e) {
 
         if (panels.length > 0) {
             panels.removeClass("active");
+            $(".block-add.active").removeClass("active");
 
             if (piranha.prevFocus) {
                 piranha.prevFocus.focus();
