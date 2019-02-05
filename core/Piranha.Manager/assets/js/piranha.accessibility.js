@@ -54,6 +54,7 @@ $(window).on("keydown", function (e) {
             if (piranha.prevFocus) {
                 piranha.prevFocus.focus();
                 piranha.prevFocus = null;
+                piranha.blocks.selectedIndex = null;
             } else {
                 $(":focus").blur();
             }

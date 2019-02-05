@@ -46,6 +46,11 @@ piranha.blocks = new function() {
             acceptFrom: ".block-group-list .list-group,.block-types"
         });
 
+        types[0].addEventListener("sortstart", function (e) {
+            $(".block-add.active").removeClass("active");
+            self.selectedIndex = null;
+        });
+
         //
         // Add sortable events for block groups
         //
@@ -85,48 +90,6 @@ piranha.blocks = new function() {
                 // insert editor view.
                 //
                 self.insertBlock(item, e.detail.destination.index);
-
-                /*
-                $.ajax({
-                    url: piranha.baseUrl + "manager/block/create",
-                    method: "POST",
-                    contentType: "application/json",
-                    dataType: "html",
-                    data: JSON.stringify({
-                        TypeName: $(item).data("typename"),
-                        BlockIndex: e.detail.destination.index
-                    }),
-                    success: function (res) {
-                        // Remove the block-type container
-                        $(".blocks .block-type").remove();
-
-                        // Add the new block at the requested position
-                        $(res).insertBefore($(".blocks .block-item").get(e.detail.destination.index));
-
-                        // If the new region contains a html editor, make sure
-                        // we initialize it.
-                        var editors = $(res).find(".block-editor").each(function () {
-                            addInlineEditor("#" + this.id);
-                        });
-
-                        // Update the sortable list
-                        sortable(".blocks", {
-                            handle: ".sortable-handle",
-                            items: ":not(.unsortable)",
-                            acceptFrom: ".blocks,.block-types"
-                        });
-
-                        // Unhide
-                        $(".blocks .loading").removeClass("loading");
-
-                        // Recalc form indexes
-                        self.recalcBlocks();
-
-                        // Deactiveate the block panel
-                        $("#panelBlocks").removeClass("active");
-                    }
-                });
-                */
             } else {
                 // Recalc form indexes
                 self.recalcBlocks();
@@ -173,17 +136,20 @@ piranha.blocks = new function() {
                 // Deactiveate the block panel
                 $("#panelBlocks").removeClass("active");
                 $(".block-add.active").removeClass("active");
-
-                // Clear selected index
-                self.selectedIndex = null;
+                $("#block-search").val("");
 
                 // Reset focus
-                if (piranha.prevFocus) {
-                    piranha.prevFocus.focus();
-                    piranha.prevFocus = null;
-                } else {
-                    $(":focus").blur();
+                if (self.selectedIndex != null)
+                {
+                    if (piranha.prevFocus) {
+                        piranha.prevFocus.focus();
+                        piranha.prevFocus = null;
+                    } else {
+                        $(":focus").blur();
+                    }
                 }
+                // Clear selected index
+                self.selectedIndex = null;
             }
         });
     };
@@ -343,6 +309,23 @@ piranha.blocks = new function() {
         if (manager.tools.isempty(this)) {
             $(this).removeClass("check-empty");
             $(this).addClass("empty");
+        }
+    });
+
+    // Insert block on enter
+    $("#block-search").on("keypress", function(e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+
+            if (self.selectedIndex != null) {
+                var  result = $(".block-type:visible");
+
+                if (result.length === 1) {
+                    // There's only a single media file left in
+                    // the result list, let's click it
+                    result.find("a").click();
+                }
+            }
         }
     });
 

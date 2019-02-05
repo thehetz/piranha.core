@@ -92,6 +92,7 @@ $(document).ready(function() {
         if (piranha.prevFocus) {
             piranha.prevFocus.focus();
             piranha.prevFocus = null;
+            piranha.blocks.selectedIndex = null;
         }
     });
 
