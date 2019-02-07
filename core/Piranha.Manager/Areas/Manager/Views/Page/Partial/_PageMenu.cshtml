@@ -1,0 +1,72 @@
+@model Piranha.Areas.Manager.Models.PageEditModel
+
+<div class="top-nav">
+    <nav>
+        <ul class="navbar-nav">
+            @if (Model.Regions.Count > 0)
+            {
+                <li>
+                    <div class="btn-group" role="group">
+                        <button id="btnContent" type="button" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-table"></i>Regions
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="btnContent">
+                            @foreach (var region in Model.Regions)
+                            {
+                                <a class="dropdown-item btn-panel-region" data-focus="#btnContent" data-toggle="panel" data-target="#region-@region.Id" href="#">@region.Id</a>
+                            }
+                        </div>
+                    </div>
+                </li>
+            }
+            <li style="display:none">
+                <button id="btn-settings" type="button" class="btn btn-sm btn-primary btn-icon" data-focus="#btnContent" data-toggle="panel" data-target="#panelSettings">
+                    <span class="fas fa-cog"></span>
+                </button>
+            </li>
+            <li>
+                <button id="main-submit" type="submit" class="btn btn-sm btn-success">
+                    <i class="fas fa-check"></i>
+                </button>
+            </li>
+            <li>
+                <button id="btnActions" type="button" class="btn btn-sm btn-labeled btn-primary btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-h"></i>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="btnActions">
+                    @if (Model.Id != Guid.Empty)
+                    {
+                        <a class="dropdown-item" href="@Url.Action("Preview", new { id = Model.Id })" target="_preview">Preview</a>
+                    }
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded)
+                    {
+                        if (Model.Published.HasValue)
+                        {
+                            <a id="submit-unpublish" class="dropdown-item" href="#">Unpublish</a>
+                            <a id="submit-publish" class="dropdown-item hidden" href="#">Publish now</a>
+                        }
+                        else
+                        {
+                            <a id="submit-unpublish" class="dropdown-item hidden" href="#">Unpublish</a>
+                            <a id="submit-publish" class="dropdown-item" href="#">Publish now</a>
+                        }
+                    }
+                    <a id="btn-settings" class="dropdown-item" href="#" data-focus="#btnActions" data-toggle="panel" data-target="#panelSettings">Settings</a>
+                    @if (Model.OriginalPageId.HasValue)
+                    {
+                        if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesSave)).Succeeded)
+                        {
+                            <hr>
+                            <a class="dropdown-item" href="@Url.Action("Detach", new { @id = Model.Id })">Detach page</a>
+                        }
+                    }
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesDelete)).Succeeded)
+                    {
+                        <hr>
+                        <a href="@Url.Action("Delete", new { @id = Model.Id })" class="dropdown-item confirm-delete" data-message="Are you sure you want to delete the page?"><span class="text-danger">Delete page</span></a>
+                    }
+                </div>
+            </li>
+        </ul>
+    </nav>
+</div>

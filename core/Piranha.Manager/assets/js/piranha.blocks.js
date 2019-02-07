@@ -89,7 +89,7 @@ piranha.blocks = new function() {
                 // New block dropped in block list, create and
                 // insert editor view.
                 //
-                self.insertBlock(item, e.detail.destination.index);
+                self.createBlock(item, e.detail.destination.index);
             } else {
                 // Recalc form indexes
                 self.recalcBlocks();
@@ -97,7 +97,41 @@ piranha.blocks = new function() {
         });
     };
 
-    self.insertBlock = function (item, index) {
+    /**
+     * Inserts the given block at the specified index.
+     *
+     * @param {*} block The block
+     * @param {*} index The new position index
+     */
+    self.insertBlock = function (block, index) {
+        // Add the new block at the requested position
+        block.insertBefore($(".blocks .block-item").get(index));
+
+        // If the new region contains a html editor, make sure
+        // we initialize it.
+        block.find(".block-editor").each(function () {
+            addInlineEditor("#" + this.id);
+        });
+
+        // Update the sortable list
+        sortable(".blocks", {
+            handle: ".sortable-handle",
+            items: ":not(.unsortable)",
+            acceptFrom: ".blocks,.block-types"
+        });
+
+        // Recalc form indexes
+        self.recalcBlocks();
+    };
+
+    /**
+     * Creates a new block and inserts it at
+     * the specified index.
+     *
+     * @param {*} item The selected block type item
+     * @param {*} index The new position index
+     */
+    self.createBlock = function (item, index) {
         $.ajax({
             url: piranha.baseUrl + "manager/block/create",
             method: "POST",
@@ -111,27 +145,8 @@ piranha.blocks = new function() {
                 // Remove the block-type container
                 $(".blocks .block-type").remove();
 
-                // Add the new block at the requested position
-                $(res).insertBefore($(".blocks .block-item").get(index));
-
-                // If the new region contains a html editor, make sure
-                // we initialize it.
-                var editors = $(res).find(".block-editor").each(function () {
-                    addInlineEditor("#" + this.id);
-                });
-
-                // Update the sortable list
-                sortable(".blocks", {
-                    handle: ".sortable-handle",
-                    items: ":not(.unsortable)",
-                    acceptFrom: ".blocks,.block-types"
-                });
-
-                // Unhide
-                $(".blocks .loading").removeClass("loading");
-
-                // Recalc form indexes
-                self.recalcBlocks();
+                // Insert the create block
+                self.insertBlock($(res), index);
 
                 // Deactiveate the block panel
                 $("#panelBlocks").removeClass("active");
@@ -284,7 +299,7 @@ piranha.blocks = new function() {
         e.preventDefault();
 
         if (self.selectedIndex != null) {
-            self.insertBlock($(this).parent(), self.selectedIndex + 1);
+            self.createBlock($(this).parent(), self.selectedIndex + 1);
         }
     });
 

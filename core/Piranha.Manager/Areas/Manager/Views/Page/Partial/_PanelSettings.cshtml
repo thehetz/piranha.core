@@ -1,6 +1,7 @@
 ﻿@model Piranha.Areas.Manager.Models.PageEditModel
 @{
     var isCopy = Model.OriginalPageId.HasValue;
+    var canPublish = (await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded;
 }
 
 <div id="panelSettings" class="panel panel-settings">
@@ -8,11 +9,11 @@
     <span class="panel-title">Page Settings</span>
 
     <div class="panel-body">
-        @if ((await Authorization.AuthorizeAsync(User, Piranha.Manager.Permission.PagesPublish)).Succeeded)
+        @if (canPublish)
         {
             <div class="form-group">
                 <label>Publish date</label>
-                <input asp-for="Published" class="form-control form-control-sm">
+                <input asp-for="Published" class="form-control form-control-sm autofocus">
             </div>
         }
         else
@@ -21,7 +22,7 @@
         }
         <div class="form-group">
             <label>Navigation title</label>
-            <input asp-for="NavigationTitle" class="form-control form-control-sm" placholder="Optional navigation title" maxlength="128">
+            <input asp-for="NavigationTitle" class="form-control form-control-sm @(!canPublish ? "autofocus" : "")" placholder="Optional navigation title" maxlength="128">
         </div>
         <div class="form-group">
             <label>Hidden</label>

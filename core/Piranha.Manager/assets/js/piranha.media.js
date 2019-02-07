@@ -124,7 +124,7 @@ piranha.media = new function() {
     };
 };
 
-$(document).on("click", "#modalMedia .modal-body a", function () {
+$(document).on("click", "#modalMedia .modal-body a:not('.media-upload-link')", function () {
     var button = $(this);
 
     if (button.data("type") === "folder") {
@@ -160,6 +160,10 @@ $(document).on("submit", "#modalMedia form", function (e) {
 $(document).on("click", ".btn-media-clear", function () {
     piranha.media.init($(this));
     piranha.media.remove($(this));
+});
+
+$(document).on("click", ".dropzone a", function (e) {
+    e.preventDefault();
 });
 
 $(document).on("shown.bs.modal",".modal", function (event) {

@@ -105,8 +105,18 @@
         width: 400px;
         right: -387px;
 
+        .panel-close {
+            display: none;
+        }
+
         &.active, &:hover {
             right: 0;
+        }
+
+        &.active {
+            .panel-close {
+                display: inline;
+            }
         }
 
         .row {
