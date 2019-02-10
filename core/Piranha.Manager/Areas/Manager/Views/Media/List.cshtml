@@ -1,5 +1,6 @@
 @model Piranha.Areas.Manager.Models.MediaListModel
 @using Piranha.Models
+@inject Piranha.IApi api
 @{
     ViewBag.Title = "Media";
     ViewBag.Subtitle = "";
@@ -9,6 +10,8 @@
     {
         ViewBag.Subtitle += $"<small>/ <a href=\"{Url.Action("List", new { folderId = item.Id })}\">{@item.Name}</a></small>";
     }
+
+    
 }
 
 @section script {
@@ -96,7 +99,11 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
         <li class="breadcrumb-item">Content</li>
-        <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        <li class="breadcrumb-item @(Model.Breadcrumb.Count == 0 ? "active" : "")" aria-current="page">@ViewBag.Title</li>
+        @for (int i = 0; i < Model.Breadcrumb.Count; i++)
+        {
+            <li class="breadcrumb-item @(i == Model.Breadcrumb.Count - 1 ? "active" : "")">@Model.Breadcrumb[i].Name</li>
+        }
     </ol>
 </nav></div>
 
@@ -119,13 +126,91 @@
     </div>
 </form>
 
-<div class="row">
+<div class="row" >
     <div class="col-sm-12">
-        <div class="table-filter" data-table="#media-table">
+        <div class="gallery-filter" data-container="#gallery-container">
             <div class="form-group">
                 <input id="media-search" type="text" class="form-control input-block search-field" placeholder="Search for a media file in the current folder">
             </div>
         </div>
+    </div>
+    <div class="col-12">
+        <div  id="gallery-container" class="gallery">
+            @if (Model.CurrentFolderId.HasValue)
+            {
+                <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })" class="thumbnail thumbnail-folder thumbnail-back" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
+                    <div class="thumbnail-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <p class="thumbnail-caption">...</p>
+                </a>
+            }
+
+            @foreach (var folder in Model.Folders)
+            {
+                var filesInFolder = Model.FilesInFolder[folder.Id];
+                    
+                <a href="@Url.Action("List", new { folderId = folder.Id})" class="thumbnail thumbnail-folder" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
+                    <div class="thumbnail-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>
+                    <p class="thumbnail-caption">@folder.Name</p>
+                </a>
+            }
+
+            @foreach (var item in Model.Media)
+            {
+        
+                <a href="#" class="thumbnail" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                    <div class="thumbnail-icon">
+                        <i class="fas fa-folder-open"></i>
+                    </div>                    
+                    <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="thumbnail-image">
+                    <p class="thumbnail-caption">@item.Filename</p>
+                </a>
+        
+                @*<tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
+                    <td class="text-limit-cell">
+                        <div class="dd-handle">
+                                <span class="fas fa-ellipsis-v"></span>
+                        </div>
+                        <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                            @if (item.Type == MediaType.Image) {
+                                <i class="fas fa-image media-icon"></i>
+                            } else if (item.Type == MediaType.Video) {
+                                <i class="fas fa-film media-icon"></i>
+                            } else if (item.Type == MediaType.Document) {
+                                <i class="fas fa-book media-icon"></i>
+                            } else {
+                                <i class="fas fa-exclamation-triangle media-icon"></i>
+                            }
+                            @item.Filename
+                        </a>
+                    </td>
+                    <td>@item.ContentType</td>
+                    <td>@Piranha.Utils.FormatByteSize(item.Size)</td>
+                    <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
+                    <td class="actions one">
+                        <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = item.Id})" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the media asset?">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>*@
+            }
+        </div>        
+    </div>
+</div>
+
+
+
+    @*<div class="col">
+        <div class="card" style="width: 18rem;">
+          <img src="..." class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+    </div>
         <table id="media-table" class="table table-main table-media">
             <thead>
                 <tr>
@@ -206,7 +291,7 @@
             </tbody>
         </table>
     </div>
-</div>
+</div>*@
 
 <partial name="Partial/_MediaModal" />
 <partial name="Partial/_FolderModal" />

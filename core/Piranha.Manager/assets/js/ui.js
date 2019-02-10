@@ -337,8 +337,16 @@ $(document).on("keyup",
         e.preventDefault();
 
         var table = $(this).parent().parent().data().table;
-
         manager.tools.tablesort(table, "", "", "", $(this).val());
+    });
+
+$(document).on("keyup",
+    ".gallery-filter #media-search",
+    function (e) {
+        e.preventDefault();
+
+        var container = $(this).parent().parent().data().container;
+        manager.tools.gallerysort(container, $(this).val());
     });
 
 //
@@ -540,6 +548,24 @@ var manager = {
                             row.show();
                         else row.hide();
                     }
+                });
+        },
+
+        gallerysort: function (container, search) {
+            var toLower = search.toLowerCase();
+
+            $.each($(container).find(".thumbnail:not(.thumbnail-back)"),
+                function (i, e) {
+                    var card = $(e);
+                    var show = true;
+                    if (search != "") {
+                        if (!card.first(".thumbnail-caption").text().toLowerCase().includes(toLower))
+                            show = false;
+                    }
+
+                    if (show)
+                        card.show();
+                    else card.hide();
                 });
         },
 
