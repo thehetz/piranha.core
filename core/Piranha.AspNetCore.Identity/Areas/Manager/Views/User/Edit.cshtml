@@ -1,4 +1,6 @@
 @model Piranha.AspNetCore.Identity.Models.UserEditModel
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService Authorization
 @{
     if (Model.User.Id != Guid.Empty)
     {
@@ -11,33 +13,49 @@
     ViewBag.Controller = "User";
 }
 
+@section script {
+    <script>
+        document.getElementById('User_UserName').focus();
+    </script>
+}
+
 @using (var form = Html.BeginForm("Save", "User", FormMethod.Post, new {@class = "form", role = "form", autocomplete = "off"}))
 {
     @Html.HiddenFor(m => m.User.Id)
 
-    <div class="row">
-        <div class="col-sm-12 buttons">
-            <!-- Actions -->
-            <button type="submit" class="btn btn-labeled btn-success pull-right">
-                <span class="btn-label">
-                    <i class="fas fa-check"></i>
-                </span>
-                @if (Model.User.Id != Guid.Empty)
-                {
-                    <text>Update</text>
-                }
-                else
-                {
-                    <text>Save</text>
-                }
-            </button>
+    <div class="top">
+        <div class="top-nav">
+            <nav>
+                <ul class="navbar-nav">
+                    @if ((await Authorization.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersEdit)).Succeeded)
+                    {
+                        <li>
+                            <button type="submit" class="btn btn-sm btn-labeled btn-success">
+                                <i class="fas fa-check"></i>
+                                @if (Model.User.Id != Guid.Empty) {
+                                    <text>Update</text>
+                                } else {
+                                    <text>Save</text>
+                                }
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </nav>
         </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">System</li>
+                <li class="breadcrumb-item"><a href="@Url.Action("List", "User")">Users</a></li>
+                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+            </ol>
+        </nav>
     </div>
 
     @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
      {
          <div class="row">
-             <div class="col-sm-12">
+             <div class="col">
                  <div class="@ViewBag.MessageCss">
                      @Html.Raw(ViewBag.Message)
                  </div>
@@ -45,22 +63,22 @@
          </div>
      }
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">General information</h3>
+    <div class="card">
+        <div class="card-header">
+            <span class="title">General information</span>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Username</label>
-                        @Html.TextBoxFor(m => m.User.UserName, new {@class = "form-control small", maxlength = 128, placeholder = "The user name used to log in"})
+                        @Html.TextBoxFor(m => m.User.UserName, new { @class = "form-control form-control-sm", maxlength = 128, placeholder = "The user name used to log in" })
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Email address</label>
-                        @Html.TextBoxFor(m => m.User.Email, new {@class = "form-control small", type = "email", maxlength = 128, placeholder = "The email address for the user"})
+                        @Html.TextBoxFor(m => m.User.Email, new { @class = "form-control form-control-sm", type = "email", maxlength = 128, placeholder = "The email address for the user" })
                     </div>
                 </div>
             </div>
@@ -106,22 +124,22 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">Update password</h3>
+    <div class="card">
+        <div class="card-header">
+            <span class="title">Update password</span>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row">
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Password</label>
-                        @Html.PasswordFor(m => m.Password, new {@class = "form-control small", maxlength = 128, placeholder = "Add new password"})
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control form-control-sm", maxlength = 128, placeholder = "Add new password" })
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>&nbsp;</label>
-                        @Html.PasswordFor(m => m.PasswordConfirm, new {@class = "form-control small", maxlength = 128, placeholder = "Confirm new password"})
+                        @Html.PasswordFor(m => m.PasswordConfirm, new { @class = "form-control form-control-sm", maxlength = 128, placeholder = "Confirm new password" })
                     </div>
                 </div>
             </div>

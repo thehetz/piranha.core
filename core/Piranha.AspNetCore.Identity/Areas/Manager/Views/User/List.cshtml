@@ -1,37 +1,39 @@
-@using Piranha.AspNetCore.Identity
 @model Piranha.AspNetCore.Identity.Models.UserListModel
+@using Piranha.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService Authorization
 @{
     ViewBag.Title = "Users";
     ViewBag.Controller = "User";
 }
 
-<form>
-    <div class="top">
-        <div class="top-nav">
-            <nav>
-                <ul class="navbar-nav">
+<div class="top">
+    <div class="top-nav">
+        <nav>
+            <ul class="navbar-nav">
+                @if ((await Authorization.AuthorizeAsync(User, Piranha.AspNetCore.Identity.Permissions.UsersAdd)).Succeeded)
+                {
                     <li>
                         <a href="@Url.Action("Add")" class="btn btn-sm btn-labeled btn-primary" tabindex="0">
                             <i class="fas fa-plus"></i>Add
                         </a>
                     </li>
-                </ul>
-            </nav>
-        </div>
-
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">System</li>
-                <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
-            </ol>
+                }
+            </ul>
         </nav>
     </div>
-</form>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">System</li>
+            <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
+        </ol>
+    </nav>
+</div>
 
 @if (!string.IsNullOrWhiteSpace(ViewBag.Message))
 {
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col">
             <div class="@ViewBag.MessageCss">
                 @Html.Raw(ViewBag.Message)
             </div>
