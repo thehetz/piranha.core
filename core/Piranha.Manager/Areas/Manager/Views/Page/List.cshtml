@@ -120,22 +120,40 @@
     </div>
 }
 
-<ol class="sitemap header">
-    <li>
-        <div class="actions three float-right"></div>
-        <div class="date float-right">Published</div>
-        <div class="info float-right">Page type</div>
-        <div class="content">Title</div>
-    </li>
-</ol>
-<div class="dd">
-    <ol class="sitemap dd-list">
-        @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() {
-            Sitemap = Model.Sitemap,
-            SiteId = Model.SiteId,
-            PageId = Model.PageId,
-            ExpandedLevels = Model.ExpandedLevels
-        })
+@if (Model.Sitemap.Count > 0)
+{
+    <ol class="sitemap header">
+        <li>
+            <div class="actions three float-right"></div>
+            <div class="date float-right">Published</div>
+            <div class="info float-right">Page type</div>
+            <div class="content">Title</div>
+        </li>
     </ol>
-    <div id="sitemap-spinner" class="spinner" style="display:none"></div>
-</div>
+    <div class="dd">
+        <ol class="sitemap dd-list">
+            @Html.Partial("Partial/_Sitemap", new Piranha.Areas.Manager.Models.SitemapModel() {
+                Sitemap = Model.Sitemap,
+                SiteId = Model.SiteId,
+                PageId = Model.PageId,
+                ExpandedLevels = Model.ExpandedLevels
+            })
+        </ol>
+        <div id="sitemap-spinner" class="spinner" style="display:none"></div>
+    </div>
+}
+else
+{
+    <div class="jumbotron">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <h1>There's nothing here yet</h1>
+                <p class="lead">
+                    Welcome to the <strong>@Model.SiteTitle</strong> App! To get started, just click
+                    <strong>Add</strong> on the top right of this page to create the
+                    first Page of the App.
+                </p>
+            </div>
+        </div>
+    </div>
+}

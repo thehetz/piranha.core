@@ -40,3 +40,12 @@ body {
 .hidden {
     display: none;
 }
+
+.jumbotron {
+    background-color: $bg;
+    text-align: center;
+
+    h1 {
+        margin-bottom: 2rem;
+    }
+}
