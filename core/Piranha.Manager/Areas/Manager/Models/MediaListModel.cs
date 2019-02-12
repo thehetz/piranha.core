@@ -17,6 +17,12 @@ namespace Piranha.Areas.Manager.Models
 {
     public class MediaListModel
     {
+        public enum DisplayMode
+        {
+            List,
+            Gallery
+        }
+
         public IList<Data.Media> Media { get; set; } = new List<Data.Media>();
         public MediaStructure Folders { get; set; } = new MediaStructure();
         public IList<MediaStructureItem> Breadcrumb { get; set; }
@@ -24,6 +30,7 @@ namespace Piranha.Areas.Manager.Models
         public Guid? ParentFolderId { get; set; }
         public IDictionary<Guid, int> FilesInFolder { get; set; } = new Dictionary<Guid, int>();
         public MediaType? Filter { get; set; }
+        public DisplayMode Display { get; set; } = DisplayMode.List;
 
         /// <summary>
         /// Gets all available content in the specified folder.

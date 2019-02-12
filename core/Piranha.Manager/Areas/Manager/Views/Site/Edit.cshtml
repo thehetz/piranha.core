@@ -1,6 +1,6 @@
 @model Piranha.Areas.Manager.Models.SiteEditModel
 @{
-    ViewBag.Title = "Edit site";
+    ViewBag.Title = "Edit App";
     ViewBag.Controller = "Site";
 }
 
@@ -36,7 +36,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">Settings</li>
-                <li class="breadcrumb-item"><a href="@Url.Action("List", "Site")">Sites</a></li>
+                <li class="breadcrumb-item"><a href="@Url.Action("List", "Site")">Apps</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
             </ol>
         </nav>
@@ -74,7 +74,7 @@
             <div class="form-group">
                 <div class="form-group">
                     <label>Description</label>
-                    @Html.TextAreaFor(m => m.Site.Description, new { @class = "form-control form-control-sm", maxlength = 256 })
+                    @Html.TextAreaFor(m => m.Site.Description, new { @class = "form-control form-control-sm", maxlength = 255 })
                 </div>
             </div>
             <div class="row">
@@ -87,7 +87,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>Hostnames</label>
-                        @Html.TextBoxFor(m => m.Site.Hostnames, new { @class = "form-control form-control-sm", maxlength = 256, placeholder = "Optional hostnames" })
+                        @Html.TextBoxFor(m => m.Site.Hostnames, new { @class = "form-control form-control-sm", maxlength = 255, placeholder = "Optional hostnames" })
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                         <div class="checkbox">
                             <label>
                                 @Html.CheckBoxFor(m => m.Site.IsDefault, new { @class = "checkbox" })
-                                If this should be the default site of the installation.
+                                If this should be the default app of the installation.
                             </label>
                         </div>
                     </div>

@@ -1,11 +1,11 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System.Collections.Generic;
@@ -71,7 +71,7 @@ namespace Piranha.Manager
             /// Gets the menu item with the given internal id.
             /// </summary>
             public MenuItem this[string internalId] {
-                get 
+                get
                 {
                     return this.FirstOrDefault(i => i.InternalId == internalId);
                 }
@@ -81,7 +81,7 @@ namespace Piranha.Manager
         /// <summary>
         /// The basic manager menu.
         /// </summary>
-        public static MenuItemList Items = new MenuItemList 
+        public static MenuItemList Items = new MenuItemList
         {
             new MenuItem
             {
@@ -93,7 +93,7 @@ namespace Piranha.Manager
                     },
                     new MenuItem
                     {
-                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "List", Policy = Permission.Media, Css = "fas fa-images"
+                        InternalId = "Media", Name = "Media", Controller = "Media", Action = "Index", Policy = Permission.Media, Css = "fas fa-images"
                     }
                 }
             },
@@ -107,7 +107,7 @@ namespace Piranha.Manager
                     },
                     new MenuItem
                     {
-                        InternalId = "Sites", Name = "Sites", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "fas fa-globe"
+                        InternalId = "Sites", Name = "Apps", Controller = "Site", Action = "List", Policy = Permission.Sites, Css = "fas fa-cubes"
                     }
                 }
             },

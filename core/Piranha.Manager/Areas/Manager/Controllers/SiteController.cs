@@ -1,11 +1,11 @@
 /*
- * Copyright (c) 2017 Håkan Edling
+ * Copyright (c) 2017-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -68,18 +68,18 @@ namespace Piranha.Areas.Manager.Controllers
             {
                 if (model.Save(_api))
                 {
-                    SuccessMessage("The site has been saved.");
+                    SuccessMessage("The app has been saved.");
                     return RedirectToAction("Edit", new { id = model.Site.Id });
                 }
                 else
                 {
-                    ErrorMessage("The site could not be saved.", false);
+                    ErrorMessage("The app could not be saved.", false);
                     return View("Edit", model);
                 }
             }
             catch (ArgumentException)
             {
-                ErrorMessage("The site could not be saved. Title is mandatory", false);
+                ErrorMessage("The app could not be saved. Title is mandatory", false);
                 return View("Edit", model);
             }
         }
@@ -95,16 +95,16 @@ namespace Piranha.Areas.Manager.Controllers
                 if (!site.IsDefault)
                 {
                     _api.Sites.Delete(id);
-                    SuccessMessage("The site has been deleted.");
+                    SuccessMessage("The app has been deleted.");
                 }
                 else
                 {
-                    ErrorMessage("Can't delete the default site.");
+                    ErrorMessage("Can't delete the default app.");
                 }
             }
             else
             {
-                ErrorMessage("This site could not be found.");
+                ErrorMessage("The specified app could not be found.");
             }
             return RedirectToAction("List");
         }
@@ -123,12 +123,12 @@ namespace Piranha.Areas.Manager.Controllers
         {
             if (_service.Save(model))
             {
-                SuccessMessage("The site content has been saved.");
+                SuccessMessage("The app content has been saved.");
                 return RedirectToAction("EditContent", new { id = model.Id });
             }
             else
             {
-                ErrorMessage("The site content could not be saved.", false);
+                ErrorMessage("The app content could not be saved.", false);
                 return View("EditContent", _service.Refresh(model));
             }
         }

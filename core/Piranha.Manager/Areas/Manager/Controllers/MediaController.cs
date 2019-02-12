@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -22,6 +22,8 @@ namespace Piranha.Areas.Manager.Controllers
     [Area("Manager")]
     public class MediaController : ManagerAreaControllerBase
     {
+        private const string COOKIE_SELECTEDMEDIADISPLAY = "PiranhaManager_SelectedMediaDisplay";
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -31,12 +33,70 @@ namespace Piranha.Areas.Manager.Controllers
         /// <summary>
         /// Gets the list view for the media.
         /// </summary>
+        [Route("manager/media")]
+        [Authorize(Policy = Permission.Media)]
+        public IActionResult Index()
+        {
+            // Get the currently selected display mode from the request cookies
+            var display = Request.Cookies[COOKIE_SELECTEDMEDIADISPLAY];
+            var displayMode = Models.MediaListModel.DisplayMode.List;
+            if (!string.IsNullOrEmpty(display))
+            {
+                try
+                {
+                    displayMode = (Models.MediaListModel.DisplayMode)Enum.Parse(
+                        typeof(Models.MediaListModel.DisplayMode), display);
+                }
+                catch
+                {
+                    // Ignore error and default to list view
+                }
+            }
+
+            if (displayMode == Models.MediaListModel.DisplayMode.List)
+            {
+                return RedirectToAction("List");
+            }
+            else
+            {
+                return RedirectToAction("Gallery");
+            }
+        }
+
+        /// <summary>
+        /// Gets the list view for the media.
+        /// </summary>
         /// <param name="folderId">The optional folder id</param>
-        [Route("manager/media/{folderId:Guid?}")]
+        [Route("manager/media/list/{folderId:Guid?}")]
         [Authorize(Policy = Permission.Media)]
         public IActionResult List(Guid? folderId = null)
         {
-            return View("List", Models.MediaListModel.Get(_api, folderId));
+            var model = Models.MediaListModel.Get(_api, folderId);
+            model.Display = Models.MediaListModel.DisplayMode.List;
+
+            // Store the current display mode in the request cookie
+            Response.Cookies.Append(COOKIE_SELECTEDMEDIADISPLAY,
+                Models.MediaListModel.DisplayMode.List.ToString());
+
+            return View("List", model);
+        }
+
+        /// <summary>
+        /// Gets the list view for the media.
+        /// </summary>
+        /// <param name="folderId">The optional folder id</param>
+        [Route("manager/media/gallery/{folderId:Guid?}")]
+        [Authorize(Policy = Permission.Media)]
+        public IActionResult Gallery(Guid? folderId = null)
+        {
+            var model = Models.MediaListModel.Get(_api, folderId);
+            model.Display = Models.MediaListModel.DisplayMode.Gallery;
+
+            // Store the current display mode in the request cookie
+            Response.Cookies.Append(COOKIE_SELECTEDMEDIADISPLAY,
+                Models.MediaListModel.DisplayMode.Gallery.ToString());
+
+            return View("List", model);
         }
 
         /// <summary>

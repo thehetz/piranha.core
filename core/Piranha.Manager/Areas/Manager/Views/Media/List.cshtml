@@ -1,5 +1,6 @@
 @model Piranha.Areas.Manager.Models.MediaListModel
 @using Piranha.Models
+@using Piranha.Areas.Manager.Models;
 @inject Piranha.IApi api
 @{
     ViewBag.Title = "Media";
@@ -11,7 +12,7 @@
         ViewBag.Subtitle += $"<small>/ <a href=\"{Url.Action("List", new { folderId = item.Id })}\">{@item.Name}</a></small>";
     }
 
-    
+
 }
 
 @section script {
@@ -82,6 +83,12 @@
     <nav>
         <ul class="navbar-nav">
             <li>
+                <a href="@Url.Action("List", new { folderId = @Model.CurrentFolderId })" class="btn btn-sm @(Model.Display == MediaListModel.DisplayMode.List ? "btn-light" : "btn-link")"><i class="fas fa-list-ul"></i></a>
+            </li>
+            <li>
+                <a href="@Url.Action("Gallery", new { folderId = @Model.CurrentFolderId })" class="btn btn-sm @(Model.Display == MediaListModel.DisplayMode.Gallery ? "btn-light" : "btn-link")"><i class="fas fa-th-large"></i></a>
+            </li>
+            <li>
                 <div class="btn-group" role="group">
                     <button id="btnAdd" class="btn btn-sm btn-labeled btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-plus"></i>Add
@@ -117,150 +124,62 @@
     </div>
 }
 
-<form action="@Url.Action("Add")" class="dropzone needsclick dz-clickable" id="dropzone" enctype="multipart/form-data">
+@using (var form = Html.BeginForm("Add", "Media", FormMethod.Post, new { id = "dropzone", @class = "dropzone needsclick dz-clickable", enctype="multipart/form-data" }))
+{
     @Html.Hidden("ParentId", Model.CurrentFolderId)
 
     <div class="dz-message needsclick">
         <i class="fas fa-cloud-upload-alt"></i>
         <a href="#">Drop files here or click to upload.</a>
     </div>
-</form>
+}
 
-<div class="row" >
-    <div class="col-sm-12">
-        <div class="gallery-filter" data-container="#gallery-container">
-            <div class="form-group">
-                <input id="media-search" type="text" class="form-control input-block search-field" placeholder="Search for a media file in the current folder">
+@if (Model.Display == MediaListModel.DisplayMode.Gallery)
+{
+    <div class="row" >
+        <div class="col-sm-12">
+            <div class="gallery-filter" data-container="#gallery-container">
+                <div class="form-group">
+                    <input id="media-search" type="text" class="form-control input-block search-field" placeholder="Search for a media file in the current folder">
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-12">
-        <div  id="gallery-container" class="gallery">
-            @if (Model.CurrentFolderId.HasValue)
-            {
-                <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })" class="thumbnail thumbnail-folder thumbnail-back" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
-                    <div class="thumbnail-icon">
-                        <i class="fas fa-folder-open"></i>
-                    </div>
-                    <p class="thumbnail-caption">...</p>
-                </a>
-            }
-
-            @foreach (var folder in Model.Folders)
-            {
-                var filesInFolder = Model.FilesInFolder[folder.Id];
-                    
-                <a href="@Url.Action("List", new { folderId = folder.Id})" class="thumbnail thumbnail-folder" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
-                    <div class="thumbnail-icon">
-                        <i class="fas fa-folder-open"></i>
-                    </div>
-                    <p class="thumbnail-caption">@folder.Name</p>
-                </a>
-            }
-
-            @foreach (var item in Model.Media)
-            {
-        
-                <a href="#" class="thumbnail" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
-                    <div class="thumbnail-icon">
-                        <i class="fas fa-folder-open"></i>
-                    </div>                    
-                    <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="thumbnail-image">
-                    <p class="thumbnail-caption">@item.Filename</p>
-                </a>
-        
-                @*<tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
-                    <td class="text-limit-cell">
-                        <div class="dd-handle">
-                                <span class="fas fa-ellipsis-v"></span>
+        <div class="col-12">
+            <div id="gallery-container" class="gallery">
+                @if (Model.CurrentFolderId.HasValue)
+                {
+                    <a href="@Url.Action("Gallery", new { folderId = Model.ParentFolderId })" class="thumbnail thumbnail-folder thumbnail-back" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
+                        <div class="thumbnail-icon">
+                            <i class="fas fa-folder-open"></i>
                         </div>
-                        <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
-                            @if (item.Type == MediaType.Image) {
-                                <i class="fas fa-image media-icon"></i>
-                            } else if (item.Type == MediaType.Video) {
-                                <i class="fas fa-film media-icon"></i>
-                            } else if (item.Type == MediaType.Document) {
-                                <i class="fas fa-book media-icon"></i>
-                            } else {
-                                <i class="fas fa-exclamation-triangle media-icon"></i>
-                            }
-                            @item.Filename
-                        </a>
-                    </td>
-                    <td>@item.ContentType</td>
-                    <td>@Piranha.Utils.FormatByteSize(item.Size)</td>
-                    <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
-                    <td class="actions one">
-                        <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = item.Id})" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the media asset?">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
-                </tr>*@
-            }
-        </div>        
-    </div>
-</div>
-
-
-
-    @*<div class="col">
-        <div class="card" style="width: 18rem;">
-          <img src="..." class="card-img-top" alt="...">
-          <div class="card-body">
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-          </div>
-        </div>
-    </div>
-        <table id="media-table" class="table table-main table-media">
-            <thead>
-                <tr>
-                    <th class="handle">Name</th>
-                    <th class="medium">Type</th>
-                    <th class="medium">Size</th>
-                    <th class="date">Modified</th>
-                    <th clsas="actions one"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.CurrentFolderId.HasValue) {
-                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
-                        <td class="text-limit-cell">
-                            <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">
-                                <i class="fas fa-folder-open media-icon"></i>
-                                ...
-                            </a>
-                        </td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td class="actions one"></td>
-                    </tr>
+                        <p class="thumbnail-caption">...</p>
+                    </a>
                 }
-                @foreach (var folder in Model.Folders) {
+
+                @foreach (var folder in Model.Folders)
+                {
                     var filesInFolder = Model.FilesInFolder[folder.Id];
 
-                    <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
-                        <td class="text-limit-cell">
-                            <a href="@Url.Action("List", new { folderId = folder.Id})">
-                                <i class="fas fa-folder-open media-icon"></i>
-                                @folder.Name
-                            </a>
-                        </td>
-                        <td></td>
-                        <td>@filesInFolder @(filesInFolder == 1 ? "item" : "items")</td>
-                        <td>@folder.Created.ToString("yyyy-MM-dd")</td>
-                        <td class="actions one">
-                            @if (filesInFolder == 0)
-                            {
-                                <a class="remove confirm-delete" href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top" data-message="Are you sure you want to delete the media folder?">
-                                    <i class="fas fa-trash"></i>
-                                </a>
-                            }
-                        </td>
-                    </tr>
+                    <a href="@Url.Action("Gallery", new { folderId = folder.Id})" class="thumbnail thumbnail-folder" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
+                        <div class="thumbnail-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <p class="thumbnail-caption">@folder.Name</p>
+                    </a>
                 }
-                @foreach (var item in Model.Media) {
-                    <tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
+
+                @foreach (var item in Model.Media)
+                {
+
+                    <a href="#" class="thumbnail" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                        <div class="thumbnail-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="thumbnail-image">
+                        <p class="thumbnail-caption">@item.Filename</p>
+                    </a>
+
+                    @*<tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
                         <td class="text-limit-cell">
                             <div class="dd-handle">
                                     <span class="fas fa-ellipsis-v"></span>
@@ -286,12 +205,99 @@
                                 <i class="fas fa-trash"></i>
                             </a>
                         </td>
-                    </tr>
+                    </tr>*@
                 }
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
-</div>*@
+}
+else
+{
+    <div class="table-filter" data-table="#media-table">
+        <div class="form-group">
+            <input id="media-search" type="text" class="form-control input-block search-field" placeholder="Search for a media file in the current folder">
+        </div>
+    </div>
+    <table id="media-table" class="table table-main table-media">
+        <thead>
+            <tr>
+                <th class="handle">Name</th>
+                <th class="medium">Type</th>
+                <th class="medium">Size</th>
+                <th class="date">Modified</th>
+                <th clsas="actions one"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.CurrentFolderId.HasValue) {
+                <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
+                    <td class="text-limit-cell">
+                        <a href="@Url.Action("List", new { folderId = Model.ParentFolderId })">
+                            <i class="fas fa-folder-open media-icon"></i>
+                            ...
+                        </a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="actions one"></td>
+                </tr>
+            }
+            @foreach (var folder in Model.Folders) {
+                var filesInFolder = Model.FilesInFolder[folder.Id];
+
+                <tr ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
+                    <td class="text-limit-cell">
+                        <a href="@Url.Action("List", new { folderId = folder.Id})">
+                            <i class="fas fa-folder-open media-icon"></i>
+                            @folder.Name
+                        </a>
+                    </td>
+                    <td></td>
+                    <td>@filesInFolder @(filesInFolder == 1 ? "item" : "items")</td>
+                    <td>@folder.Created.ToString("yyyy-MM-dd")</td>
+                    <td class="actions one">
+                        @if (filesInFolder == 0)
+                        {
+                            <a class="remove confirm-delete" href="@Url.Action("DeleteFolder", new { id = folder.Id})" data-toggle="tooltip" data-original-title="Delete folder" data-placement="top" data-message="Are you sure you want to delete the media folder?">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
+            @foreach (var item in Model.Media) {
+                <tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
+                    <td class="text-limit-cell">
+                        <div class="dd-handle">
+                                <span class="fas fa-ellipsis-v"></span>
+                        </div>
+                        <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                            @if (item.Type == MediaType.Image) {
+                                <i class="fas fa-image media-icon"></i>
+                            } else if (item.Type == MediaType.Video) {
+                                <i class="fas fa-film media-icon"></i>
+                            } else if (item.Type == MediaType.Document) {
+                                <i class="fas fa-book media-icon"></i>
+                            } else {
+                                <i class="fas fa-exclamation-triangle media-icon"></i>
+                            }
+                            @item.Filename
+                        </a>
+                    </td>
+                    <td>@item.ContentType</td>
+                    <td>@Piranha.Utils.FormatByteSize(item.Size)</td>
+                    <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
+                    <td class="actions one">
+                        <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = item.Id})" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the media asset?">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 <partial name="Partial/_MediaModal" />
 <partial name="Partial/_FolderModal" />
