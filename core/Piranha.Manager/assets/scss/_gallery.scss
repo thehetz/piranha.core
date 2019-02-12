@@ -1,3 +1,4 @@
+@import "colors";
 
 .gallery {
     display: flex;
@@ -11,15 +12,14 @@
     margin: 0 .5rem 1rem .5rem;
     overflow: hidden;
     max-width: calc(16.66667% - 1rem);
-    background: white;
+    background: $bg;
+    padding: 1rem 1rem .5rem;
     display: flex;
     flex-direction: column;
 
     .thumbnail-icon {
         display: none;
     }
-
-
 
     .thumbnail-image {
         flex-grow: 1;
@@ -28,6 +28,7 @@
     }
 
     .thumbnail-caption {
+        font-size: .8rem;
         text-align: center;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -51,5 +52,10 @@
                 transform: translateX(-50%) translateY(-50%);
             }
         }
+    }
+
+    &:focus {
+        background: $color_drop;
+        outline: solid 1px $color_border;
     }
 }
