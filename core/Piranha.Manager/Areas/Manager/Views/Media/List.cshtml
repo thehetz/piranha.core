@@ -145,14 +145,14 @@
             </div>
         </div>
         <div class="col-12">
-            <div id="gallery-container" class="gallery">
+            <div class="row no-gutters">
                 @if (Model.CurrentFolderId.HasValue)
                 {
-                    <a href="@Url.Action("Gallery", new { folderId = Model.ParentFolderId })" class="thumbnail thumbnail-folder thumbnail-back" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
-                        <div class="thumbnail-icon">
-                            <i class="fas fa-folder-open"></i>
+                    <a href="@Url.Action("Gallery", new { folderId = Model.ParentFolderId })" class="col-3 col-lg-2 card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">       
+                        <div class="card-icon">
+                            <i class="fas fa-folder-open fa-3x"></i>
                         </div>
-                        <p class="thumbnail-caption">...</p>
+                        <p class="card-text text-center">...</p>
                     </a>
                 }
 
@@ -160,52 +160,34 @@
                 {
                     var filesInFolder = Model.FilesInFolder[folder.Id];
 
-                    <a href="@Url.Action("Gallery", new { folderId = folder.Id})" class="thumbnail thumbnail-folder" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
-                        <div class="thumbnail-icon">
-                            <i class="fas fa-folder-open"></i>
-                        </div>
-                        <p class="thumbnail-caption">@folder.Name</p>
+                    <a href="@Url.Action("Gallery", new { folderId = folder.Id})" class="col-3 col-lg-2 card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
+                        <div class="card-icon">
+                            <i class="fas fa-folder-open fa-3x"></i>
+                        </div>                        
+                        <p class="card-text text-center">@folder.Name@(filesInFolder > 0 ? " (" + filesInFolder + ")" : "")</p>
                     </a>
                 }
 
                 @foreach (var item in Model.Media)
                 {
-
-                    <a href="#" class="thumbnail" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
-                        <div class="thumbnail-icon">
-                            <i class="fas fa-folder-open"></i>
-                        </div>
-                        <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="thumbnail-image">
-                        <p class="thumbnail-caption">@item.Filename</p>
-                    </a>
-
-                    @*<tr data-id="@item.Id" draggable="true" ondragstart="drag(event)">
-                        <td class="text-limit-cell">
-                            <div class="dd-handle">
-                                    <span class="fas fa-ellipsis-v"></span>
+                    <a href="#" class="col-3 col-lg-2 card p-2 m-0" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                        @if (item.Type == MediaType.Image) {
+                           <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="card-img-top pb-2"> 
+                       } else if (item.Type == MediaType.Video) {
+                            <div class="card-icon">
+                                <i class="fas fa-film fa-3x"></i>
                             </div>
-                            <a href="#" target="_blank" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
-                                @if (item.Type == MediaType.Image) {
-                                    <i class="fas fa-image media-icon"></i>
-                                } else if (item.Type == MediaType.Video) {
-                                    <i class="fas fa-film media-icon"></i>
-                                } else if (item.Type == MediaType.Document) {
-                                    <i class="fas fa-book media-icon"></i>
-                                } else {
-                                    <i class="fas fa-exclamation-triangle media-icon"></i>
-                                }
-                                @item.Filename
-                            </a>
-                        </td>
-                        <td>@item.ContentType</td>
-                        <td>@Piranha.Utils.FormatByteSize(item.Size)</td>
-                        <td>@item.LastModified.ToString("yyyy-MM-dd")</td>
-                        <td class="actions one">
-                            <a class="remove confirm-delete" href="@Url.Action("Delete", new { id = item.Id})" data-toggle="tooltip" data-original-title="Delete" data-placement="top" data-message="Are you sure you want to delete the media asset?">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </td>
-                    </tr>*@
+                       } else if (item.Type == MediaType.Document) {
+                           <div class="card-icon">
+                                <i class="fas fa-book fa-3x"></i>
+                            </div>
+                       } else {
+                            <div class="card-icon">
+                                <i class="fas fa-exclamation-triangle fa-3x"></i>
+                            </div>
+                       }                                                         
+                        <p class="card-text text-center">@item.Filename</p>
+                    </a>
                 }
             </div>
         </div>
