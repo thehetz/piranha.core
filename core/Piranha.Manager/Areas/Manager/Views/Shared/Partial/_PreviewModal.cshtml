@@ -2,33 +2,29 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"></h4>
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-            <div class="modal-body">
-                <div id="previewImage" class="row" style="display:none">
-                    <div class="col-sm-12">
-                        <img class="img-preview" id="imgPreview" src="" alt="">
-                    </div>
+            <div class="modal-body bg-light">
+                <div id="previewImage" class="text-center" style="display:none">
+                    <img class="img-preview mw-100" id="imgPreview" src="" alt="">
                 </div>
-                <div id="previewVideo" class="row" style="display:none">
-                    <div class="col-sm-12">
-                        <video width="100%" controls>
-                            <source src="" type="">
-                            Your browser does not support the video tag.
-                        </video> 
-                    </div>
+                <div id="previewVideo" style="display:none">
+                    <video class="w-100" controls>
+                        <source src="" type="">
+                        Your browser does not support the video tag.
+                    </video> 
                 </div>
                 <div id="previewDocument" class="row" style="display:none">
-                    <div class="col-sm-12">
-                        <div class="embed-responsive embed-responsive-4by3">
-                            <iframe class="embed-responsive-item" src=""></iframe>
-                        </div>
+                    <div class="embed-responsive embed-responsive-4by3">
+                        <iframe class="embed-responsive-item" src=""></iframe>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-12">
-                        <p class="media-info">
+                    <div class="col">
+                        <p class="text-center m-0 pt-3">
                             ContentType: <strong id="previewContentType"></strong> .
                             FileSize: <strong id="previewFilesize"></strong> .
                             Last Modified: <strong id="previewModified"></strong>
@@ -37,23 +33,21 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <div class="row">
-                    <div class="col-md-9 col-xs-8">
-                        <form action="@Url.Action("Add", "Media")" method="post" enctype="multipart/form-data">
-                            <input type="hidden" id="previewId" name="Id" value="">
-                            <input type="hidden" id="previewParentId" name="ParentId" value="">
-                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                <div class="form-control" data-trigger="fileinput"><i class="fas fa-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                                <span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Update file</span><span class="fileinput-exists">Change</span><input type="file" name="Uploads" multiple></span>
-                                <button type="submit" class="btn btn-default pull-left fileinput-exists">Upload</button>
-                            </div>
-                        </form>
+                <form class="form-inline mr-auto" action="@Url.Action("Add", "Media")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="previewId" name="Id" value="">
+                    <input type="hidden" id="previewParentId" name="ParentId" value="">
+                    <div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="Uploads" multiple>
+                            <label class="custom-file-label" for="customFile">Choose file</label>
+                        </div>
                     </div>
-                    <div class="col-md-3 col-xs-4">
-                        <a id="btnDownload" href="" class="btn btn-default" download>Download</a>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-secondary ml-3">Update file</button>
+                    </div>                    
+                </form>
+                <a id="btnDownload" href="" class="btn btn-outline-secondary" download>Download</a>
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
