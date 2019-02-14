@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using Microsoft.AspNetCore.Http;
@@ -41,7 +41,7 @@ namespace Piranha.AspNetCore.Services
             /// <summary>
             /// Default internal constructur.
             /// </summary>
-            internal SiteHelper(IApi api) 
+            internal SiteHelper(IApi api)
             {
                 _api = api;
             }
@@ -68,7 +68,7 @@ namespace Piranha.AspNetCore.Services
             /// <summary>
             /// Default internal constructur.
             /// </summary>
-            internal MediaHelper(IApi api) 
+            internal MediaHelper(IApi api)
             {
                 _api = api;
             }
@@ -120,7 +120,7 @@ namespace Piranha.AspNetCore.Services
         /// Gets the media helper.
         /// </summary>
         public IMediaHelper Media { get; internal set; }
-        
+
         /// <summary>
         /// Gets the currently requested URL.
         /// </summary>
@@ -153,8 +153,36 @@ namespace Piranha.AspNetCore.Services
             {
                 Data.Site site = null;
 
-                // Try to get the requested site by hostname & prefix
+                // Get the current site from the requested url
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
+                if (string.IsNullOrWhiteSpace(url))
+                {
+                    site = Api.Sites.GetBySlug(null);
+                }
+                else
+                {
+                    var segments = url.Substring(1).Split(new char[] { '/' });
+
+                    site = Api.Sites.GetBySlug(segments[0]);
+
+                    if (site != null)
+                    {
+                        if (segments.Length > 1)
+                        {
+                            context.Request.Path = new PathString("/" + string.Join("/", segments.Subset(1)));
+                        }
+                        else {
+                            context.Request.Path = new PathString("");
+                        }
+                    }
+                    else
+                    {
+                        site = Api.Sites.GetBySlug(null);
+                    }
+                }
+
+                /*
+                // Try to get the requested site by hostname & prefix
                 if (!string.IsNullOrEmpty(url) && url.Length > 1)
                 {
                     var segments = url.Substring(1).Split(new char[] { '/' });
@@ -171,6 +199,7 @@ namespace Piranha.AspNetCore.Services
                 // If we didn't find the site, get the default site
                 if (site == null)
                     site = Api.Sites.GetDefault();
+                */
 
                 // Store the current site id & get the sitemap
                 if (site != null)

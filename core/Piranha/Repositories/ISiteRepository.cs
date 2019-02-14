@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -35,6 +35,13 @@ namespace Piranha.Repositories
         /// <param name="internalId">The unique internal i</param>
         /// <returns>The model</returns>
         Site GetByInternalId(string internalId);
+
+        /// <summary>
+        /// Gets the model with the specified slug.
+        /// </summary>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The model</returns>
+        Site GetBySlug(string slug);
 
         /// <summary>
         /// Gets the model with the given hostname.
@@ -80,7 +87,7 @@ namespace Piranha.Repositories
         void Save(Site model);
 
         /// <summary>
-        /// Saves the given site content to the site with the 
+        /// Saves the given site content to the site with the
         /// given id.
         /// </summary>
         /// <param name="siteId">The site id</param>

@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using Microsoft.EntityFrameworkCore;
@@ -100,7 +100,7 @@ namespace Piranha
 
         /// <summary>
         /// Gets/sets the post field set.
-        /// </summary>        
+        /// </summary>
         public DbSet<Data.PostField> PostFields { get; set; }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Piranha
 
         /// <summary>
         /// Gets/sets the site field set.
-        /// </summary>        
+        /// </summary>
         public DbSet<Data.SiteField> SiteFields { get; set; }
 
         /// <summary>
@@ -254,9 +254,11 @@ namespace Piranha
             mb.Entity<Data.Site>().Property(s => s.SiteTypeId).HasMaxLength(64);
             mb.Entity<Data.Site>().Property(s => s.InternalId).HasMaxLength(64).IsRequired();
             mb.Entity<Data.Site>().Property(s => s.Title).HasMaxLength(128);
+            mb.Entity<Data.Site>().Property(s => s.Slug).HasMaxLength(128);
             mb.Entity<Data.Site>().Property(s => s.Description).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Hostnames).HasMaxLength(256);
             mb.Entity<Data.Site>().Property(s => s.Culture).HasMaxLength(6);
+            mb.Entity<Data.Site>().HasIndex(s => s.Slug).IsUnique();
             mb.Entity<Data.Site>().HasIndex(s => s.InternalId).IsUnique();
 
             mb.Entity<Data.SiteField>().ToTable("Piranha_SiteFields");
@@ -267,7 +269,7 @@ namespace Piranha
 
             mb.Entity<Data.SiteType>().ToTable("Piranha_SiteTypes");
             mb.Entity<Data.SiteType>().Property(s => s.Id).HasMaxLength(64).IsRequired();
-            mb.Entity<Data.SiteType>().Property(s => s.CLRType).HasMaxLength(256);            
+            mb.Entity<Data.SiteType>().Property(s => s.CLRType).HasMaxLength(256);
 
             mb.Entity<Data.Tag>().ToTable("Piranha_Tags");
             mb.Entity<Data.Tag>().Property(t => t.Title).IsRequired().HasMaxLength(64);
@@ -357,13 +359,14 @@ namespace Piranha
                 Sites.Add(new Data.Site
                 {
                     Id = Guid.NewGuid(),
-                    InternalId = "Default",
                     IsDefault = true,
-                    Title = "Default Site",
+                    Title = "Root",
+                    InternalId = "Root",
+                    Slug = "",
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
-            
+
             //
             // Make sure we don't have NULL values in Piranha_MediaVersions.FileExtension
             //

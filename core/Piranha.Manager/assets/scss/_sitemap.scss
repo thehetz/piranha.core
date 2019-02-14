@@ -1,7 +1,11 @@
 @import "colors";
 
 ol.sitemap {
-    padding-left: 0;
+	padding-left: 0;
+
+	ol {
+		padding-left: 34px;
+	}
 
 	.actions {
 		padding: .5rem;
@@ -54,7 +58,7 @@ li.sitemap-item {
 	list-style-type: none;
 
 	&:focus-within {
-		.dd-handle, .dd-toggle, .actions, .content {
+		>.dd-handle, >.dd-toggle, >.actions, >.content {
 			background: $color_drop;
 		}
 	}
@@ -71,9 +75,11 @@ li.sitemap-item {
 		}
 	}
 
+	/*
 	ol {
 		padding-left: 0;
 	}
+	*/
 
 	.dd-toggle {
 		background: #fff;

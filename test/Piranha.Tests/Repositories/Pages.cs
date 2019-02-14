@@ -144,6 +144,7 @@ namespace Piranha.Tests.Repositories
                 var emptysite = new Data.Site {
                     Id = SITE_ID,
                     Title = "Empty Site",
+                    Slug = "empty",
                     InternalId = "EmptySite",
                     IsDefault = false
                 };

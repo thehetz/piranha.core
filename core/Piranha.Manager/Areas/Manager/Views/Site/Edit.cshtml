@@ -1,7 +1,7 @@
 @model Piranha.Areas.Manager.Models.SiteEditModel
 @{
-    ViewBag.Title = "Edit App";
-    ViewBag.Controller = "Site";
+    ViewBag.Title = "Edit Site";
+    ViewBag.Controller = "Page";
 }
 
 @section script {
@@ -35,8 +35,8 @@
         </div>
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">Settings</li>
-                <li class="breadcrumb-item"><a href="@Url.Action("List", "Site")">Apps</a></li>
+                <li class="breadcrumb-item">Content</li>
+                <li class="breadcrumb-item"><a href="@Url.Action("List", "Page")">Pages</a></li>
                 <li class="breadcrumb-item active" aria-current="page">@ViewBag.Title</li>
             </ol>
         </nav>

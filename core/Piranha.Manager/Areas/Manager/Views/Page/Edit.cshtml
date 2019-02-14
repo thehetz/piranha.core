@@ -299,34 +299,16 @@
             @if (Model.PageType.UseBlocks)
             {
                 <div class="blocks">
-                    <div class="unsortable">
-                        <div class="block-add" style="display:none">
-                            <div class="block-add-dialog">
-                                @foreach (var category in Piranha.App.Blocks.GetCategories()) {
-                                    var items = Piranha.App.Blocks.GetByCategory(category).Where(i => !i.IsUnlisted);
-
-                                    <label>@category</label>
-                                    @foreach (var block in items) {
-                                        <a href="#" data-typename="@block.TypeName"><i class="@block.Icon"></i>@block.Name</a>
-                                    }
-                                }
-                            </div>
-                            <a href="#" class="block-add-toggle">
-                                <hr><span class="fas fa-plus"></span>
-                            </a>
-                        </div>
-                    </div>
+                    @{
+                        var addId = $"add-{Guid.NewGuid().ToString()}";
+                    }
+                    <a id="@addId" href="#" data-focus="#@addId" data-toggle="panel" data-target="#panelBlocks" class="block-add">
+                        <hr>
+                        <i class="fas fa-plus-circle"></i>
+                        <div class="block-placeholder"></div>
+                    </a>
                     @Html.EditorFor(m => m.Blocks)
                 </div>
-                @if (Model.Blocks.Count == 0)
-                {
-                    <div class="block-info content-preview unsortable">
-                        <p>
-                            It looks like this page doesn't have any content yet! To get started just press the
-                            plus above to add your first block.
-                        </p>
-                    </div>
-                }
             }
 
             <partial name="Partial/_PanelBlocks" />

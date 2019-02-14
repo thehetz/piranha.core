@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using AutoMapper;
@@ -268,13 +268,15 @@ namespace Piranha
                                 .ForMember(p => p.Level, o => o.Ignore())
                                 .ForMember(p => p.Items, o => o.Ignore())
                                 .ForMember(p => p.PageTypeName, o => o.Ignore())
-                                .ForMember(p => p.Permalink, o => o.MapFrom(d => !d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug));
+                                .ForMember(p => p.Permalink, o => o.MapFrom(d =>
+                                    (!string.IsNullOrWhiteSpace(d.Site.Slug) ? $"/{d.Site.Slug}" : "") +
+                                    (!d.ParentId.HasValue && d.SortOrder == 0 ? "/" : "/" + d.Slug)));
                             cfg.CreateMap<Data.Param, Data.Param>()
                                 .ForMember(p => p.Id, o => o.Ignore())
                                 .ForMember(p => p.Created, o => o.Ignore());
                             cfg.CreateMap<Data.Post, Models.PostBase>()
                                 .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PostTypeId))
-                                .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Blog.Slug + "/" + m.Slug))
+                                .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Blog + "/" + m.Slug))
                                 .ForMember(p => p.Blocks, o => o.Ignore());
                             cfg.CreateMap<Models.PostBase, Data.Post>()
                                 .ForMember(p => p.PostTypeId, o => o.MapFrom(m => m.TypeId))
@@ -294,6 +296,7 @@ namespace Piranha
                                 .ForMember(s => s.TypeId, o => o.MapFrom(m => m.SiteTypeId));
                             cfg.CreateMap<Models.SiteContentBase, Data.Site>()
                                 .ForMember(s => s.SiteTypeId, o => o.Ignore())
+                                .ForMember(s => s.Slug, o => o.Ignore())
                                 .ForMember(s => s.InternalId, o => o.Ignore())
                                 .ForMember(s => s.Description, o => o.Ignore())
                                 .ForMember(s => s.Hostnames, o => o.Ignore())

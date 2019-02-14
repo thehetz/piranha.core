@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/piranhacms/piranha
- * 
+ *
  */
 
 using System;
@@ -65,6 +65,34 @@ namespace Piranha.Repositories
                 id = db.Sites
                     .AsNoTracking()
                     .Where(s => s.InternalId == internalId)
+                    .Select(s => s.Id)
+                    .FirstOrDefault();
+
+                if (id != Guid.Empty)
+                    model = GetById(id.Value);
+            }
+            return model;
+        }
+
+        /// <summary>
+        /// Gets the model with the specified slug.
+        /// </summary>
+        /// <param name="slug">The unique slug</param>
+        /// <returns>The model</returns>
+        public Site GetBySlug(string slug)
+        {
+            var id = cache?.Get<Guid?>($"SiteSlug_{slug}");
+            Site model = null;
+
+            if (id != null)
+            {
+                model = GetById(id.Value);
+            }
+            else
+            {
+                id = db.Sites
+                    .AsNoTracking()
+                    .Where(s => s.Slug == slug)
                     .Select(s => s.Id)
                     .FirstOrDefault();
 
@@ -216,6 +244,7 @@ namespace Piranha.Repositories
 
             if (id != null)
             {
+                var site = GetById(id.Value);
                 var sitemap = onlyPublished && cache != null ? cache.Get<Models.Sitemap>($"Sitemap_{id}") : null;
 
                 if (sitemap == null)
@@ -233,7 +262,7 @@ namespace Piranha.Repositories
                     {
                         pages = pages.Where(p => p.Published.HasValue).ToList();
                     }
-                    sitemap = Sort(pages, pageTypes);
+                    sitemap = Sort(pages, pageTypes, site);
 
                     if (onlyPublished && cache != null)
                     {
@@ -246,7 +275,7 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
-        /// Saves the given site content to the site with the 
+        /// Saves the given site content to the site with the
         /// given id.
         /// </summary>
         /// <param name="siteId">The site id</param>
@@ -323,7 +352,9 @@ namespace Piranha.Repositories
 
             // Ensure InternalId
             if (string.IsNullOrWhiteSpace(model.InternalId))
+            {
                 model.InternalId = Utils.GenerateInteralId(model.Title);
+            }
 
             if (model.IsDefault)
             {
@@ -343,6 +374,17 @@ namespace Piranha.Repositories
                 if (count == 0)
                     model.IsDefault = true;
             }
+
+            // Ensure Slug
+            if (string.IsNullOrWhiteSpace(model.Slug))
+            {
+                model.Slug = Utils.GenerateSlug(model.Title);
+            }
+            else
+            {
+                model.Slug = Utils.GenerateSlug(model.Slug);
+            }
+
             db.Sites.Add(model);
         }
 
@@ -399,6 +441,17 @@ namespace Piranha.Repositories
                     }
                 }
             }
+
+            // Ensure Slug
+            if (string.IsNullOrWhiteSpace(model.Slug) && !model.IsDefault)
+            {
+                model.Slug = Utils.GenerateSlug(model.Title);
+            }
+            else
+            {
+                model.Slug = Utils.GenerateSlug(model.Slug);
+            }
+
             var site = db.Sites.FirstOrDefault(s => s.Id == model.Id);
             if (site != null)
             {
@@ -414,6 +467,7 @@ namespace Piranha.Repositories
         {
             cache.Set(model.Id.ToString(), model);
             cache.Set($"SiteId_{model.InternalId}", model.Id);
+            cache.Set($"SiteSlug_{model.Slug}", model.Id);
             if (model.IsDefault)
             {
                 cache.Set($"Site_{Guid.Empty}", model);
@@ -427,6 +481,7 @@ namespace Piranha.Repositories
         protected override void RemoveFromCache(Site model)
         {
             cache.Remove($"SiteId_{model.InternalId}");
+            cache.Remove($"SiteSlug_{model.Slug}");
             if (model.IsDefault)
             {
                 cache.Remove($"Site_{Guid.Empty}");
@@ -442,12 +497,13 @@ namespace Piranha.Repositories
         /// <param name="pages">The full page list</param>
         /// <param name="parentId">The current parent id</param>
         /// <returns>The sitemap</returns>
-        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Guid? parentId = null, int level = 0)
+        private Models.Sitemap Sort(IEnumerable<Page> pages, IEnumerable<Models.PageType> pageTypes, Site site, Guid? parentId = null, int level = 0)
         {
             var result = new Models.Sitemap();
 
             foreach (var page in pages.Where(p => p.ParentId == parentId).OrderBy(p => p.SortOrder))
             {
+                page.Site = site;
                 var item = App.Mapper.Map<Page, Models.SitemapItem>(page);
 
                 if (!string.IsNullOrEmpty(page.RedirectUrl))
@@ -457,7 +513,7 @@ namespace Piranha.Repositories
 
                 item.Level = level;
                 item.PageTypeName = pageTypes.First(t => t.Id == page.PageTypeId).Title;
-                item.Items = Sort(pages, pageTypes, page.Id, level + 1);
+                item.Items = Sort(pages, pageTypes, site, page.Id, level + 1);
 
                 result.Add(item);
             }

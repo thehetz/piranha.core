@@ -8,9 +8,11 @@
     z-index: 67200;
 
     &.modal-panel {
-        left: inherit;
+        left: initial;
+        right: 0;
         bottom: inherit;
         height: 100%;
+        width: inherit;
 
         .modal-dialog {
             margin: 0;

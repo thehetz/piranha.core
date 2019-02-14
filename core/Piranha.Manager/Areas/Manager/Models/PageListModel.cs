@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016 Håkan Edling
+ * Copyright (c) 2016-2019 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Piranha.Models;
 
 namespace Piranha.Areas.Manager.Models
 {
@@ -20,18 +21,24 @@ namespace Piranha.Areas.Manager.Models
         {
             public string Id { get; set; }
             public string Title { get; set; }
+            public string Slug { get; set; }
             public bool IsDefault { get; set; }
+
+            /// <summary>
+            /// Gets/sets the current sitemap.
+            /// </summary>
+            public IList<SitemapItem> Sitemap { get; set; } = new List<SitemapItem>();
         }
 
         /// <summary>
         /// Gets/sets the available page types.
         /// </summary>
-        public IList<Piranha.Models.PageType> PageTypes { get; set; } = new List<Piranha.Models.PageType>();
+        public IList<PageType> PageTypes { get; set; } = new List<PageType>();
 
         /// <summary>
         /// Gets/sets the current sitemap.
         /// </summary>
-        public IList<Piranha.Models.SitemapItem> Sitemap { get; set; } = new List<Piranha.Models.SitemapItem>();
+        //public IList<SitemapItem> Sitemap { get; set; } = new List<SitemapItem>();
 
         /// <summary>
         /// Gets/sets the available sites.
@@ -53,9 +60,9 @@ namespace Piranha.Areas.Manager.Models
         /// Gets/sets if the user should be able
         /// to edit the site content.
         /// </summary>
-        public bool HasSiteContent { get; set; }
+        //public bool HasSiteContent { get; set; }
 
-        public Guid SiteContentId { get; set; }
+        //public Guid SiteContentId { get; set; }
 
         /// <summary>
         /// Gets/sets the current page id.
@@ -76,30 +83,34 @@ namespace Piranha.Areas.Manager.Models
         /// <returns>The model</returns>
         public static PageListModel Get(IApi api, Guid? siteId, string pageId = null)
         {
-            var model = new PageListModel();
-
-            var site = siteId.HasValue ?
-                api.Sites.GetById(siteId.Value) : api.Sites.GetDefault();
+            var currentSite = siteId.HasValue ? api.Sites.GetById(siteId.Value) : null;
             var defaultSite = api.Sites.GetDefault();
 
-            if (site == null)
+            if (currentSite == null)
             {
-                site = defaultSite;
+                currentSite = defaultSite;
             }
 
-            model.SiteId = site.Id == defaultSite.Id ? "" : site.Id.ToString();
-            model.SiteTitle = site.Title;
-            model.HasSiteContent = !string.IsNullOrWhiteSpace(site.SiteTypeId);
-            model.SiteContentId = site.Id;
-            model.PageId = pageId;
-            model.PageTypes = api.PageTypes.GetAll().ToList();
-            model.Sitemap = api.Sites.GetSitemap(site.Id, onlyPublished: false);
+            var model = new PageListModel
+            {
+                PageId = pageId,
+                PageTypes = api.PageTypes.GetAll().ToList(),
+                SiteId = currentSite.Id.ToString(),
+                SiteTitle = currentSite.Title
+            };
+
             model.Sites = api.Sites.GetAll().Select(s => new SiteInfo
             {
                 Id = s.Id.ToString(),
                 Title = s.Title,
+                Slug = s.Slug,
                 IsDefault = s.IsDefault
-            }).ToList();
+            }).OrderByDescending(s => s.IsDefault).ThenBy(s => s.Title).ToList();
+
+            foreach (var site in model.Sites)
+            {
+                site.Sitemap = api.Sites.GetSitemap(new Guid(site.Id), onlyPublished: false);
+            }
 
             using (var config = new Config(api))
             {
