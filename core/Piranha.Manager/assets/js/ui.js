@@ -362,23 +362,23 @@ $(document).on("click",
 
         var items = "";
         for (var n = 0; n < manager.pageTypes.length; n++) {
-            items += '<li class="list-group-item"><a href="' +
+            items += '<a class="list-group-item" href="' +
                 url.replace("pageType", manager.pageTypes[n].id) +
                 '">' +
                 manager.pageTypes[n].title +
-                "</a></li>";
+                "</a>";
         }
 
         var $modal =
             $(
-                    '<div class="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button><h4 class="modal-title">' +
-                    title +
-                    '</h4></div><div class="modal-body"><ul class="list-group">' +
-                    items +
-                    '</ul></div><div class="modal-footer"><button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button></div></div></div></div>')
+                '<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><div class="modal-dialog modal-md"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">' +
+                title +
+                '</h5><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button></div><div class="modal-body bg-light"><ul class="list-group">' +
+                items +
+                '</ul></div><div class="modal-footer"></div></div></div></div>')
                 .appendTo("body");
         $modal.modal("show");
-        $modal.on("hidden.bs.modal", function() { $modal.remove(); });
+        $modal.on("hidden.bs.modal", function () { $modal.remove(); });
         return false;
     });
 
