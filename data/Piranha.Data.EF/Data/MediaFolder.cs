@@ -13,7 +13,6 @@ using System.Collections.Generic;
 
 namespace Piranha.Data
 {
-    [Serializable]
     public sealed class MediaFolder : Models.MediaFolder<Guid>
     {
         /// <summary>

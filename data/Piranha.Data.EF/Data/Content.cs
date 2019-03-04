@@ -14,7 +14,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Data
 {
-    [Serializable]
     public abstract class Content<T> where T : ContentField
     {
         /// <summary>

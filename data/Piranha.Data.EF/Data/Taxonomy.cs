@@ -12,7 +12,6 @@ using System;
 
 namespace Piranha.Data
 {
-    [Serializable]
     public abstract class Taxonomy
     {
         /// <summary>

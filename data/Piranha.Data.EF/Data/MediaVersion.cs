@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 
 namespace Piranha.Data
 {
-    [Serializable]
     public sealed class MediaVersion : Models.MediaVersion<Guid>
     {
         /// <summary>
