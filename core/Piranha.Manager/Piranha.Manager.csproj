@@ -28,13 +28,8 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="assets\output\**\*.*" />
-    <EmbeddedResource Include="assets\css\*.min.css" />
-    <EmbeddedResource Include="assets\img\*.gif" />
-    <EmbeddedResource Include="assets\img\*.ico" />
-    <EmbeddedResource Include="assets\img\*.png" />
     <EmbeddedResource Include="assets\js\*.min.js" />
     <EmbeddedResource Include="assets\lib\bootstrap\fonts\*" />
-    <EmbeddedResource Include="assets\lib\components-font-awesome\webfonts\*" />
     <EmbeddedResource Include="assets\tinymce\**\*.*" />
   </ItemGroup>
 </Project>
