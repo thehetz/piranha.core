@@ -11,7 +11,7 @@
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq;
-using Piranha.Data;
+using System.Threading.Tasks;
 using Piranha.Extend.Fields;
 using Piranha.Models;
 
@@ -51,11 +51,11 @@ namespace Piranha.AspNetCore.Services
             /// </summary>
             /// <typeparam name="T">The content type</typeparam>
             /// <returns>The site content model</returns>
-            public T GetContent<T>() where T : SiteContent<T>
+            public Task<T> GetContentAsync<T>() where T : SiteContent<T>
             {
                 if (Id != Guid.Empty)
                 {
-                    return _api.Sites.GetContentById<T>(Id);
+                    return _api.Sites.GetContentByIdAsync<T>(Id);
                 }
                 return null;
             }
@@ -146,24 +146,24 @@ namespace Piranha.AspNetCore.Services
         /// <summary>
         /// Initializes the service.
         /// </summary>
-        public void Init(HttpContext context)
+        public async Task InitAsync(HttpContext context)
         {
             // Gets the current site info
             if (!context.Request.Path.Value.StartsWith("/manager/"))
             {
-                Data.Site site = null;
+                Site site = null;
 
                 // Get the current site from the requested url
                 var url = context.Request.Path.HasValue ? context.Request.Path.Value : "";
                 if (string.IsNullOrWhiteSpace(url))
                 {
-                    site = Api.Sites.GetBySlug(null);
+                    site = await Api.Sites.GetBySlugAsync(null);
                 }
                 else
                 {
                     var segments = url.Substring(1).Split(new char[] { '/' });
 
-                    site = Api.Sites.GetBySlug(segments[0]);
+                    site = await Api.Sites.GetBySlugAsync(segments[0]);
 
                     if (site != null)
                     {
@@ -177,7 +177,7 @@ namespace Piranha.AspNetCore.Services
                     }
                     else
                     {
-                        site = Api.Sites.GetBySlug(null);
+                        site = await Api.Sites.GetBySlugAsync(null);
                     }
                 }
 
@@ -206,7 +206,7 @@ namespace Piranha.AspNetCore.Services
                 {
                     Site.Id = site.Id;
                     Site.Culture = site.Culture;
-                    Site.Sitemap = Api.Sites.GetSitemap(Site.Id);
+                    Site.Sitemap = await Api.Sites.GetSitemapAsync(Site.Id);
                 }
             }
 

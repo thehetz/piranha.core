@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Piranha.Manager;
 using Piranha.Models;
+using Piranha.Services;
 
 namespace Piranha.Areas.Manager.Controllers
 {
@@ -218,7 +219,7 @@ namespace Piranha.Areas.Manager.Controllers
         {
             if (!string.IsNullOrWhiteSpace(model.Name))
             {
-                _api.Media.SaveFolder(new Data.MediaFolder
+                _api.Media.SaveFolder(new MediaFolder
                 {
                     ParentId = model.ParentId,
                     Name = model.Name

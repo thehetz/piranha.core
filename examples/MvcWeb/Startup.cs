@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace MvcWeb
             {
                 config.ModelBinderProviders.Insert(0, new Piranha.Manager.Binders.AbstractModelBinderProvider());
             });
+            services.AddPiranha();
             services.AddPiranhaApplication();
             services.AddPiranhaFileStorage();
             services.AddPiranhaImageSharp();
@@ -31,8 +33,6 @@ namespace MvcWeb
 
             services.AddMemoryCache();
             services.AddPiranhaMemoryCache();
-
-            App.Init();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +43,9 @@ namespace MvcWeb
                 app.UseDeveloperExceptionPage();
             }
 
+            App.Init(api);
+
             // Configure cache level
-            // App.CacheLevel = Piranha.Cache.CacheLevel.Basic;
             App.CacheLevel = Piranha.Cache.CacheLevel.Full;
 
             // Custom components
@@ -55,12 +56,12 @@ namespace MvcWeb
             var pageTypeBuilder = new Piranha.AttributeBuilder.PageTypeBuilder(api)
                 .AddType(typeof(Models.BlogArchive))
                 .AddType(typeof(Models.StandardPage))
-                .AddType(typeof(Models.TeaserPage));
-            pageTypeBuilder.Build()
+                .AddType(typeof(Models.TeaserPage))
+                .Build()
                 .DeleteOrphans();
             var postTypeBuilder = new Piranha.AttributeBuilder.PostTypeBuilder(api)
-                .AddType(typeof(Models.BlogPost));
-            postTypeBuilder.Build()
+                .AddType(typeof(Models.BlogPost))
+                .Build()
                 .DeleteOrphans();
 
             // Register middleware
@@ -79,7 +80,7 @@ namespace MvcWeb
                     template: "{controller=home}/{action=index}/{id?}");
             });
 
-            Seed.Run(api);
+            Seed.RunAsync(api).GetAwaiter().GetResult();
         }
     }
 }

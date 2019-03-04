@@ -213,7 +213,6 @@ public static class ManagerModuleExtensions
 
         return builder
             .UseSession()
-            //.UseMiddleware<Piranha.Manager.ResourceMiddleware>()
             .UseSignalR(routes =>
             {
                 routes.MapHub<PreviewHub>("/manager/preview");
