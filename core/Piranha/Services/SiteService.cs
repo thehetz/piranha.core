@@ -269,6 +269,16 @@ namespace Piranha.Services
                 model.Id = Guid.NewGuid();
             }
 
+            // Ensure slug
+            if (string.IsNullOrWhiteSpace(model.Slug))
+            {
+                model.Slug = Utils.GenerateSlug(model.Title, false);
+            }
+            else
+            {
+                model.Slug = Utils.GenerateSlug(model.Slug, false);
+            }
+
             // Validate model
             var context = new ValidationContext(model);
             Validator.ValidateObject(model, context, true);
@@ -284,16 +294,6 @@ namespace Piranha.Services
             if (site != null && site.Id != model.Id)
             {
                 throw new ValidationException($"The InternalId field must be unique");
-            }
-
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-            {
-                model.Slug = Utils.GenerateSlug(model.Title, false);
-            }
-            else
-            {
-                model.Slug = Utils.GenerateSlug(model.Slug, false);
             }
 
             // Ensure we have a default site

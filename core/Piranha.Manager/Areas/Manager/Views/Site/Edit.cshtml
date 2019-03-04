@@ -12,6 +12,7 @@
 
 @using (var form = Html.BeginForm("Save", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
     @Html.HiddenFor(m => m.Site.Id)
+    @Html.HiddenFor(m => m.Site.Slug)
 
     <div class="top">
         <div class="top-nav">

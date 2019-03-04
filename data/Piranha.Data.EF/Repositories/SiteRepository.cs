@@ -50,6 +50,7 @@ namespace Piranha.Repositories
                     SiteTypeId = s.SiteTypeId,
                     Title = s.Title,
                     InternalId = s.InternalId,
+                    Slug = s.Slug,
                     Description = s.Description,
                     Hostnames = s.Hostnames,
                     IsDefault = s.IsDefault,
@@ -77,6 +78,7 @@ namespace Piranha.Repositories
                     SiteTypeId = s.SiteTypeId,
                     Title = s.Title,
                     InternalId = s.InternalId,
+                    Slug = s.Slug,
                     Description = s.Description,
                     Hostnames = s.Hostnames,
                     IsDefault = s.IsDefault,
@@ -103,6 +105,7 @@ namespace Piranha.Repositories
                     SiteTypeId = s.SiteTypeId,
                     Title = s.Title,
                     InternalId = s.InternalId,
+                    Slug = s.Slug,
                     Description = s.Description,
                     Hostnames = s.Hostnames,
                     IsDefault = s.IsDefault,
@@ -129,6 +132,7 @@ namespace Piranha.Repositories
                     SiteTypeId = s.SiteTypeId,
                     Title = s.Title,
                     InternalId = s.InternalId,
+                    Slug = s.Slug,
                     Description = s.Description,
                     Hostnames = s.Hostnames,
                     IsDefault = s.IsDefault,
@@ -154,6 +158,7 @@ namespace Piranha.Repositories
                     SiteTypeId = s.SiteTypeId,
                     Title = s.Title,
                     InternalId = s.InternalId,
+                    Slug = s.Slug,
                     Description = s.Description,
                     Hostnames = s.Hostnames,
                     IsDefault = s.IsDefault,
@@ -250,6 +255,7 @@ namespace Piranha.Repositories
             site.SiteTypeId = model.SiteTypeId;
             site.Title = model.Title;
             site.InternalId = model.InternalId;
+            site.Slug = model.Slug;
             site.Description = model.Description;
             site.Hostnames = model.Hostnames;
             site.Culture = model.Culture;
