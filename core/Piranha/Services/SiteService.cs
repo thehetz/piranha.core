@@ -269,16 +269,6 @@ namespace Piranha.Services
                 model.Id = Guid.NewGuid();
             }
 
-            // Ensure slug
-            if (string.IsNullOrWhiteSpace(model.Slug))
-            {
-                model.Slug = Utils.GenerateSlug(model.Title, false);
-            }
-            else
-            {
-                model.Slug = Utils.GenerateSlug(model.Slug, false);
-            }
-
             // Validate model
             var context = new ValidationContext(model);
             Validator.ValidateObject(model, context, true);
@@ -315,6 +305,17 @@ namespace Piranha.Services
                 if (def == null || def.Id == model.Id)
                     model.IsDefault = true;
             }
+
+            // Ensure slug
+            if (!model.IsDefault && string.IsNullOrWhiteSpace(model.Slug))
+            {
+                model.Slug = Utils.GenerateSlug(model.Title, false);
+            }
+            else
+            {
+                model.Slug = Utils.GenerateSlug(model.Slug, false);
+            }
+
             // Call hooks & save
             App.Hooks.OnBeforeSave<Site>(model);
             await _repo.Save(model).ConfigureAwait(false);
