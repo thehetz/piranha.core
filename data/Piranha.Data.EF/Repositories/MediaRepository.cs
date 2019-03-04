@@ -160,6 +160,9 @@ namespace Piranha.Repositories
             media.Filename = model.Filename;
             media.FolderId = model.FolderId;
             media.Type = model.Type;
+            media.Size = model.Size;
+            media.Width = model.Width;
+            media.Height = model.Height;
             media.ContentType = model.ContentType;
             media.LastModified = DateTime.Now;
             media.Width = model.Width;
