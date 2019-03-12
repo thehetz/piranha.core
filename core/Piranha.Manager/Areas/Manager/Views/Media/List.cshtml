@@ -136,7 +136,7 @@
 
 @if (Model.Display == MediaListModel.DisplayMode.Gallery)
 {
-    <div class="row" >
+    <div id="media-gallery" class="row" >
         <div class="col-sm-12">
             <div class="gallery-filter" data-container="#gallery-container">
                 <div class="form-group">
@@ -145,49 +145,55 @@
             </div>
         </div>
         <div class="col-12">
-            <div class="row no-gutters">
+            <div class="row small-gutters">
                 @if (Model.CurrentFolderId.HasValue)
                 {
-                    <a href="@Url.Action("Gallery", new { folderId = Model.ParentFolderId })" class="col-3 col-lg-2 card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">       
-                        <div class="card-icon">
-                            <i class="fas fa-folder-open fa-3x"></i>
-                        </div>
-                        <p class="card-text text-center">...</p>
-                    </a>
+                    <div class="col-3 col-lg-2">
+                        <a href="@Url.Action("Gallery", new { folderId = Model.ParentFolderId })" class="col-3 col-lg-2 card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@Model.ParentFolderId">
+                            <div class="card-icon">
+                                <i class="fas fa-folder-open fa-3x"></i>
+                            </div>
+                            <p class="card-text text-center">...</p>
+                        </a>
+                    </div>
                 }
 
                 @foreach (var folder in Model.Folders)
                 {
                     var filesInFolder = Model.FilesInFolder[folder.Id];
 
-                    <a href="@Url.Action("Gallery", new { folderId = folder.Id})" class="col-3 col-lg-2 card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
-                        <div class="card-icon">
-                            <i class="fas fa-folder-open fa-3x"></i>
-                        </div>                        
-                        <p class="card-text text-center">@folder.Name@(filesInFolder > 0 ? " (" + filesInFolder + ")" : "")</p>
-                    </a>
+                    <div class="col-3 col-lg-2">
+                        <a href="@Url.Action("Gallery", new { folderId = folder.Id})" class="card p-2 m-0" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dropLeave(event)" data-id="@folder.Id">
+                            <div class="card-icon">
+                                <i class="fas fa-folder-open fa-3x"></i>
+                            </div>
+                            <p class="card-text text-center">@folder.Name@(filesInFolder > 0 ? " (" + filesInFolder + ")" : "")</p>
+                        </a>
+                    </div>
                 }
 
                 @foreach (var item in Model.Media)
                 {
-                    <a href="#" class="col-3 col-lg-2 card p-2 m-0" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
-                        @if (item.Type == MediaType.Image) {
-                           <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="card-img-top pb-2"> 
-                       } else if (item.Type == MediaType.Video) {
-                            <div class="card-icon">
-                                <i class="fas fa-film fa-3x"></i>
-                            </div>
-                       } else if (item.Type == MediaType.Document) {
-                           <div class="card-icon">
-                                <i class="fas fa-book fa-3x"></i>
-                            </div>
-                       } else {
-                            <div class="card-icon">
-                                <i class="fas fa-exclamation-triangle fa-3x"></i>
-                            </div>
-                       }                                                         
-                        <p class="card-text text-center">@item.Filename</p>
-                    </a>
+                    <div class="col-3 col-lg-2">
+                        <a href="#" class="card p-2 m-0" data-toggle="modal" data-target="#modalImgPreview" data-filename="@item.Filename" data-url="@Url.Content(item.PublicUrl)" data-contenttype="@item.ContentType" data-filesize="@Piranha.Utils.FormatByteSize(item.Size)" data-modified="@item.LastModified.ToString("yyyy-MM-dd")" data-id="@item.Id" data-parentid="@item.FolderId">
+                            @if (item.Type == MediaType.Image) {
+                                <img src="@Url.Content(await api.Media.EnsureVersionAsync(item.Id, 210, 180))" class="card-img-top pb-2">
+                            } else if (item.Type == MediaType.Video) {
+                                <div class="card-icon">
+                                    <i class="fas fa-film fa-3x"></i>
+                                </div>
+                            } else if (item.Type == MediaType.Document) {
+                                <div class="card-icon">
+                                    <i class="fas fa-book fa-3x"></i>
+                                </div>
+                            } else {
+                                <div class="card-icon">
+                                    <i class="fas fa-exclamation-triangle fa-3x"></i>
+                                </div>
+                            }
+                            <p class="card-text text-center">@item.Filename</p>
+                        </a>
+                    </div>
                 }
             </div>
         </div>
