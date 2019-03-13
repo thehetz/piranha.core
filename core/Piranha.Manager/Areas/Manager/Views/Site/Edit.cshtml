@@ -12,7 +12,7 @@
 
 @using (var form = Html.BeginForm("Save", "Site", FormMethod.Post, new { @class = "form", @role = "form" })) {
     @Html.HiddenFor(m => m.Site.Id)
-    @Html.HiddenFor(m => m.Site.Slug)
+    @Html.HiddenFor(m => m.Site.InternalId)
 
     <div class="top">
         <div class="top-nav">
@@ -67,8 +67,8 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label>Internal Id</label>
-                        @Html.TextBoxFor(m => m.Site.InternalId, new { @class = "form-control", maxlength = 64 })
+                        <label>Slug</label>
+                        @Html.TextBoxFor(m => m.Site.Slug, new { @class = "form-control", maxlength = 128 })
                     </div>
                 </div>
             </div>
@@ -99,7 +99,7 @@
                         <div class="checkbox">
                             <label>
                                 @Html.CheckBoxFor(m => m.Site.IsDefault, new { @class = "checkbox" })
-                                If this should be the default app of the installation.
+                                If this should be the default site.
                             </label>
                         </div>
                     </div>

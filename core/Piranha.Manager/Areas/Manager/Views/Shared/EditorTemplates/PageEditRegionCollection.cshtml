@@ -17,19 +17,25 @@
                 <p>@Html.Raw(Model.Description)</p>
             </div>
         }
-        <div id="@Model.Id" class="region-list sortable" role="tablist">
-            @for (var i = 0; i < Model.FieldSets.Count; i++)
-            {
-                @Html.EditorFor(m => m.FieldSets[i], "PageEditRegionItem.cshtml")
-            }
+        <div class="row">
+            <div class="col">
+                <div id="@Model.Id" class="list-group region-list sortable" role="tablist">
+                    @for (var i = 0; i < Model.FieldSets.Count; i++)
+                    {
+                        @Html.EditorFor(m => m.FieldSets[i], "PageEditRegionItem.cshtml")
+                    }
+                </div>
+            </div>
         </div>
-        <div class="region-list-toolbar">
-            <button type="button" class="btn btn-labeled btn-primary pull-right addRegionItem" data-pagetypeid="@ViewData["pageTypeId"]" data-regiontypeid="@ViewData["regionTypeId"]" data-regionindex="@ViewData["regionIndex"]" data-itemindex="@Model.FieldSets.Count" data-targetid="#@Model.Id" data-contenttype="@ViewData["contentType"]">
-                <span class="btn-label">
-                    <i class="fas fa-plus"></i>
-                </span>
-                Add item
-            </button>
+        <div class="row mt-3">
+            <div class="col">
+                <button type="button" class="btn btn-sm btn-labeled btn-primary float-right addRegionItem" data-pagetypeid="@ViewData["pageTypeId"]" data-regiontypeid="@ViewData["regionTypeId"]" data-regionindex="@ViewData["regionIndex"]" data-itemindex="@Model.FieldSets.Count" data-targetid="#@Model.Id" data-contenttype="@ViewData["contentType"]">
+                    <span class="btn-label">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    Add item
+                </button>
+            </div>
         </div>
     </div>
 </div>
