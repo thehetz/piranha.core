@@ -94,6 +94,7 @@ $(document).ready(function() {
             piranha.prevFocus = null;
             piranha.blocks.selectedIndex = null;
         }
+        return false;
     });
 
     $(document).on('click', "[data-toggle='panel']", function (e) {

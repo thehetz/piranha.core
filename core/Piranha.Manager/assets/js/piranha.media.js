@@ -1,5 +1,5 @@
 //
-// Copyright (c) 2017 Håkan Edling
+// Copyright (c) 2017-2019 Håkan Edling
 //
 // This software may be modified and distributed under the terms
 // of the MIT license.  See the LICENSE file for details.
@@ -8,222 +8,97 @@
 //
 
 /*global
-    piranha, baseUrl
+    piranha, baseUrl, Vue
  */
+
+//
+// TODO: Move to central location
+//
+Dropzone.autoDiscover = false;
 
 if (typeof(piranha)  == "undefined") {
     piranha = {};
 }
 
-piranha.media = new function() {
-    "use strict";
+if (typeof(piranha.app) == "undefined") {
+    piranha.app = {};
+}
 
-    var self = this;
-
-    self.mediaId = "";
-    self.mediaName = "";
-    self.mediaUrlId = "";
-    self.mediaFilter = "";
-    self.currentFolder = "";
-    self.callback = null;
-    self.initCallback = null;
-
-    self.init = function (e) {
-        self.mediaId = e.attr("data-mediaid");
-        self.mediaName = e.data("medianame");
-        self.mediaUrlId = e.data("mediaurlid");
-        self.mediaFilter = e.data("filter");
-    };
-
-    self.load = function (e, folderId) {
-        $.ajax({
-            url: piranha.baseUrl + "manager/media/modal/" + folderId + "?filter=" + self.mediaFilter,
-            success: function (data) {
-                $("#modalMedia .modal-body").html(data);
-                self.currentFolder = folderId;
-                self.bindDropzone();
-
-                // Focus filter textbox
-                $("#media-search").focus().on("keypress", function(e) {
-                    if (e.keyCode === 13) {
-                        var  result = $("#media-table tbody tr:visible");
-
-                        if (result.length === 1) {
-                            // There's only a single media file left in
-                            // the result list, let's click it
-                            result.find("a").click();
-                        }
-                    }
-                });
-            }
-        });
-    };
-
-    self.reload = function (e) {
-        self.load(e, self.currentFolder);
-    };
-
-    self.set = function (e) {
-        if (!self.callback) {
-            if (self.mediaId) {
-                $("#" + self.mediaId).val(e.data("id"));
-            }
-            $("#" + self.mediaName).text(e.data("name"));
-            if (self.mediaUrlId) {
-                var mediaUrlCtrl = $("#" + self.mediaUrlId);
-
-                if (mediaUrlCtrl.prop("tagName") === "IMG") {
-                    mediaUrlCtrl.attr("src", e.data("url"));
-                } else {
-                    mediaUrlCtrl.val(e.data("url"));
-                }
-            }
-            $("#" + self.mediaName).data("filename", e.data("name"));
-            $("#" + self.mediaName).data("url", e.data("url"));
-            $("#" + self.mediaName).data("contenttype", e.data("contenttype"));
-            $("#" + self.mediaName).data("filesize", e.data("filesize"));
-            $("#" + self.mediaName).data("modified", e.data("modified"));
-        } else {
-            self.callback({
-                id: e.data("id"),
-                name: e.data("name"),
-                url: e.data("url")
+piranha.app.media = new Vue({
+    el: "#modalMedia",
+    data: {
+        search: "",
+        folders: [],
+        media: [],
+        currentFolderId: null,
+        parentFolderId: null
+    },
+    computed: {
+        filteredFolders() {
+            var self = this;
+            return this.folders.filter(function (item) {
+                return item.name.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
             });
-            self.callback = null;
-        }
-    };
-
-    self.remove = function (e) {
-        $("#" + self.mediaId).val("");
-        $("#" + self.mediaName).html("&nbsp;");
-        $("#" + self.mediaName).data("filename", "");
-        $("#" + self.mediaName).data("url", "");
-        $("#" + self.mediaName).data("contenttype", "");
-        $("#" + self.mediaName).data("filesize", "");
-        $("#" + self.mediaName).data("modified", "");
-        if (self.mediaUrlId) {
-            var mediaUrlCtrl = $("#" + self.mediaUrlId);
-
-            if (mediaUrlCtrl.prop("tagName") === "IMG") {
-                mediaUrlCtrl.attr("src", piranha.baseUrl + "manager/assets/img/empty-image.png");
-            }
-        }
-    };
-
-    self.bindDropzone = function () {
-        $("#dropzonemodal").dropzone({
-            paramName: "Uploads",
-            url: "/manager/media/modal/add",
-            uploadMultiple: true,
-            init: function () {
-                this.on("queuecomplete", function(file) {
-                    piranha.media.reload();
-                });
-            }
-        });
-    };
-};
-
-$(document).on("click", "#modalMedia .modal-body a:not('.media-upload-link')", function () {
-    var button = $(this);
-
-    if (button.data("type") === "folder") {
-        piranha.media.load(button, button.data("folderid"), button.data("filter"));
-    } else {
-        piranha.media.set(button);
-        $("#modalMedia").modal("hide");
-    }
-    return false;
-});
-
-$(document).on("submit", "#modalMedia form", function (e) {
-    e.preventDefault();
-
-    var form = $("#modalMedia form");
-    var formData = new FormData(form.get(0));
-
-    $.ajax({
-        url: $(this).attr("action"),
-        type: "POST",
-        data: formData,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function (data) {
-            $("#modalMedia .modal-body").html(data);
         },
-        error: function (a, b, c) {
+        filteredMedia() {
+            var self = this;
+            return this.media.filter(function (item) {
+                return item.filename.toLowerCase().indexOf(self.search.toLowerCase()) > -1;
+            });
         }
-    });
-});
+    },
+    methods: {
+        onItemSelected: function (result) {
+            console.log(result);
+        },
+        init: function (callback) {
+            this.onItemSelected = callback;
+            this.search = "";
+        },
+        load: function (id) {
+            fetch(piranha.baseUrl + "manager/api/media/list/" + (id != null ? id : ""))
+                .then(function (response) { return response.json(); })
+                .then(function (result) {
+                    piranha.app.media.search = "";
+                    piranha.app.media.folders = result.folders;
+                    piranha.app.media.media = result.media;
+                    piranha.app.media.currentFolderId = result.currentFolderId;
+                    piranha.app.media.parentFolderId = result.parentFolderId;
+                })
+                .catch(function (error) { console.log("error:", error ); });
+        },
+        reload: function () {
+            console.log("reload: " + this.currentFolderId);
 
-$(document).on("click", ".btn-media-clear", function () {
-    piranha.media.init($(this));
-    piranha.media.remove($(this));
-});
+            this.load(this.currentFolderId);
+        },
+        selectItem: function (item) {
+            // Call onItemSelected
+            if (this.onItemSelected != null) {
+                this.onItemSelected(item);
+                this.onItemSelected = null;
+            }
 
-$(document).on("click", ".dropzone a", function (e) {
-    e.preventDefault();
-});
-
-$(document).on("shown.bs.modal",".modal", function (event) {
-    $(this).find("input[autofocus]").focus();
-});
-
-$(document).on("show.bs.modal","#modalMedia", function (event) {
-    piranha.media.init($(event.relatedTarget));
-    if (piranha.media.initCallback) {
-        piranha.media.initCallback();
-        piranha.media.initCallback = null;
-    }
-    piranha.media.load($(event.relatedTarget), "");
-});
-
-$(document).on("show.bs.modal","#modalImgPreview", function (event) {
-    var link = $(event.relatedTarget);
-    var filename = link.data("filename");
-    var url = link.data("url");
-    var contenttype = link.data("contenttype");
-    var filesize = link.data("filesize");
-    var modified = link.data("modified");
-    var id = link.data("id");
-    var parentid = link.data("parentid");
-
-    var modal = $(this);
-    modal.find(".modal-title").text(filename);
-    modal.find("#btnDownload").attr("href", url);
-    modal.find("#previewContentType").text(contenttype);
-    modal.find("#previewFilesize").text(filesize);
-    modal.find("#previewModified").text(modified);
-    modal.find("#previewId").val(id);
-    modal.find("#previewParentId").val(parentid);
-
-    if (!id || id === "") {
-        modal.find(".fileinput").hide();
-    } else {
-        modal.find(".fileinput").show();
-    }
-
-    if (contenttype.startsWith("image")) {
-        modal.find("#previewImage").show();
-        modal.find("#previewVideo").hide();
-        modal.find("#previewDocument").hide();
-
-        modal.find("#imgPreview").attr("alt", filename);
-        modal.find("#imgPreview").attr("src", url);
-    } else if (contenttype.startsWith("video")) {
-        modal.find("#previewImage").hide();
-        modal.find("#previewVideo").show();
-        modal.find("#previewDocument").hide();
-
-        modal.find("video").attr("src", url);
-        modal.find("video").attr("type", contenttype);
-    } else if (contenttype === "application/pdf") {
-        modal.find("#previewImage").hide();
-        modal.find("#previewVideo").hide();
-        modal.find("#previewDocument").show();
-
-        modal.find("#previewDocument iframe").attr("src", url);
+            // Close modal
+            $("#modalMedia").modal("hide");
+        }
+    },
+    created: function () {
+        this.load();
     }
 });
 
+//
+// Attach dropzone
+//
+$("#dropzonemodal").dropzone({
+    paramName: "Uploads",
+    url: piranha.baseUrl + "manager/media/modal/add",
+    uploadMultiple: true,
+    init: function () {
+        this.on("queuecomplete", function (file) {
+            piranha.app.media.reload();
+            this.removeAllFiles();
+        });
+    }
+});

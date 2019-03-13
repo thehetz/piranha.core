@@ -21,19 +21,20 @@ var input = {
         "node_modules/jquery/dist/jquery.js",
         "node_modules/popper.js/dist/umd/popper.js",
         "node_modules/bootstrap/dist/js/bootstrap.js",
+        "node_modules/dropzone/dist/dropzone.js",
         //"Assets/lib/jasny-bootstrap/dist/js/jasny-bootstrap.js",
-        "Assets/lib/moment/min/moment.min.js",
+        //"Assets/lib/moment/min/moment.min.js",
         //"Assets/lib/bootstrap-datetimepicker-3/build/js/bootstrap-datetimepicker.min.js",
         "Assets/lib/jquery-nestable/jquery.nestable.js",
         "Assets/lib/jquery.ns-autogrow/dist/jquery.ns-autogrow.js",
         "Assets/lib/select2/dist/js/select2.js",
-        "Assets/lib/dropzone/dist/dropzone.js",
         "Assets/lib/simplemde/dist/simplemde.min.js",
         //"Assets/lib/object.assign-polyfill/object.assign.js",
         "Assets/js/html5sortable.js",
         "Assets/js/piranha.accessibility.js",
         "Assets/js/piranha.notifications.js",
         "Assets/js/piranha.media.js",
+        "Assets/js/piranha.media.ui.js",
         "Assets/js/piranha.page.js",
         "Assets/js/piranha.post.js",
         "Assets/js/piranha.blocks.js",
@@ -72,7 +73,7 @@ gulp.task("min:js", function () {
     return gulp.src(input.js, { base: "." })
         .pipe(concat(output.js))
         .pipe(gulp.dest("."))
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(rename({
             suffix: ".min"
         }))

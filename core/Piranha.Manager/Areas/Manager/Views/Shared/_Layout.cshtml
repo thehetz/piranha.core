@@ -38,14 +38,17 @@
         piranha.baseUrl = '@Url.Content("~/")';
         piranha.prevFocus = null;
     </script>
-    <script src="~/manager/assets/js/script.min.js"></script>
-    <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
 
     <partial name="Partial/_MediaModal" />
     <partial name="Partial/_PreviewModal" />
     <partial name="Partial/_PageModal" />
     <partial name="Partial/_PostModal" />
     <partial name="Partial/_BlockModal" />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="~/manager/assets/js/script.min.js"></script>
+    <script src="~/manager/assets/tinymce/tinymce.min.js"></script>
+
     @foreach (var partial in module.Partials)
     {
         <partial name="@partial" />

@@ -205,7 +205,7 @@ namespace Piranha.Areas.Manager.Controllers
             {
                 return Modal(model.ParentId);
             }
-            return Ok();
+            return Json(new { result = true });
         }
 
         /// <summary>

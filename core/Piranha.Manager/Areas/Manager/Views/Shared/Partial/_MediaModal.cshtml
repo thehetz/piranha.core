@@ -6,6 +6,63 @@
                 <h5 class="modal-title">Select media</h5>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col">
+                        <form action="@Url.Action("ModalAdd", "Media")" class="dropzone needsclick dz-clickable" id="dropzonemodal" enctype="multipart/form-data">
+                            <input name="ParentId" type="hidden" v-model="currentFolderId">
+
+                            <div class="dz-message needsclick">
+                                <span class="fas fa-cloud-upload-alt"></span>
+                                <a href="#" class="media-upload-link">Drop files here or click to upload.</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="table-filter" data-table="#media-table">
+                            <div class="form-group">
+                                <input id="media-search" v-model="search" type="text" autofocus class="form-control input-block search-field" placeholder="Search for a media file in the current folder">
+                            </div>
+                        </div>
+                        <table id="media-table" class="table table-main table-media">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th class="date">Modified</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-if="currentFolderId != null">
+                                    <td class="text-limit-cell" colspan="2">
+                                        <a href="#" v-on:click.prevent="load(parentFolderId)">
+                                            <i class="fas fa-folder-open media-icon"></i>
+                                            ...
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr v-for="folder in filteredFolders">
+                                    <td class="text-limit-cell" colspan="2">
+                                        <a href="#" v-on:click.prevent="load(folder.id)" class="text-limit" data-type="folder" data-folderid="{{ folder.id }}">
+                                            <i class="fas fa-folder-open media-icon"></i>
+                                            {{ folder.name }}
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr v-for="item in filteredMedia">
+                                    <td class="text-limit-cell">
+                                        <a href="#" v-on:click.prevent="selectItem(item)" class="text-limit" data-type="item" data-id="{{ item.id }}">
+                                            <i class="fas fa-image media-icon"></i>
+                                            {{ item.filename }}
+                                        </a>
+                                    </td>
+                                    <td>{{ item.lastModified }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
