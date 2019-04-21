@@ -14,6 +14,7 @@ using Piranha.Models;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Document", Shorthand = "Document")]
+    [Serializable]
     public class DocumentField : MediaFieldBase<DocumentField>
     {
         /// <summary>

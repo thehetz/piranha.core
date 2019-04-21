@@ -14,6 +14,7 @@ using Piranha.Models;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Audio", Shorthand = "Audio")]
+    [Serializable]
     public class AudioField : MediaFieldBase<AudioField>
     {
         /// <summary>

@@ -8,14 +8,15 @@
  *
  */
 
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Piranha.Services;
 
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Page", Shorthand = "Page")]
+    [Serializable]
     public class PageField : IField, IEquatable<PageField>
     {
         /// <summary>

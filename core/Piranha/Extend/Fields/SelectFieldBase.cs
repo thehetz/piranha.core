@@ -3,20 +3,21 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Piranha.Extend.Fields
 {
     /// <summary>
     /// Base class for all SelectFields.
     /// </summary>
+    [Serializable]
     public abstract class SelectFieldBase : IField
     {
         /// <summary>
@@ -32,7 +33,7 @@ namespace Piranha.Extend.Fields
         public abstract string EnumValue { get; set; }
 
         /// <summary>
-        /// Gets the available items to choose from. Primarily used 
+        /// Gets the available items to choose from. Primarily used
         /// from the manager interface.
         /// </summary>
         [JsonIgnore]

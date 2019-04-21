@@ -16,6 +16,7 @@ using Piranha.Services;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Post", Shorthand = "Post")]
+    [Serializable]
     public class PostField : IField, IEquatable<PostField>
     {
         /// <summary>

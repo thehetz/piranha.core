@@ -3,14 +3,15 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * http://github.com/tidyui/coreweb
- * 
+ *
  */
 
+using System;
+using System.Collections.Generic;
 using Piranha.AttributeBuilder;
 using Piranha.Models;
-using System.Collections.Generic;
 
 namespace MvcWeb.Models
 {
@@ -20,6 +21,7 @@ namespace MvcWeb.Models
     [PageType(Title = "Standard Page")]
     [PageTypeRoute(Title = "Narrow", Route = "/page")]
     [PageTypeRoute(Title = "Wide", Route = "/pagewide")]
+    [Serializable]
     public class StandardPage : Page<StandardPage>
     {
         /// <summary>

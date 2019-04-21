@@ -3,13 +3,13 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
-using Piranha.Extend.Fields;
 using System;
+using Piranha.Extend.Fields;
 
 namespace Piranha.Extend.Blocks
 {
@@ -17,6 +17,7 @@ namespace Piranha.Extend.Blocks
     /// Single column text block.
     /// </summary>
     [BlockType(Name = "Text", Category = "Content", Icon = "fas fa-font")]
+    [Serializable]
     public class TextBlock : Block
     {
         /// <summary>

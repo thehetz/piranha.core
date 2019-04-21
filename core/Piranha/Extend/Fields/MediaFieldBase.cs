@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 
 namespace Piranha.Extend.Fields
 {
+    [Serializable]
     public class MediaFieldBase<T> : IField, IEquatable<T> where T : MediaFieldBase<T>
     {
         /// <summary>

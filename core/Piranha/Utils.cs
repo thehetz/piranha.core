@@ -9,9 +9,12 @@
  */
 
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,6 +27,8 @@ namespace Piranha
     /// </summary>
     public static class Utils
     {
+        private static readonly ConcurrentDictionary<Type, bool> _types = new ConcurrentDictionary<Type, bool>();
+
         /// <summary>
         /// Gets a subset of the given array as a new array.
         /// </summary>
@@ -221,13 +226,28 @@ namespace Piranha
                 return obj;
             }
 
-            var settings = new JsonSerializerSettings
+            var formatter = new BinaryFormatter();
+            using (var stream = new MemoryStream())
             {
-                TypeNameHandling = TypeNameHandling.All
-            };
-            var json = JsonConvert.SerializeObject(obj, settings);
+                if (IsSerializable(obj.GetType()))
+                {
+                    formatter.Serialize(stream, obj);
 
-            return JsonConvert.DeserializeObject<T>(json, settings);
+                    stream.Position = 0;
+
+                    return (T)formatter.Deserialize(stream);
+                }
+                else
+                {
+                    var settings = new JsonSerializerSettings
+                    {
+                        TypeNameHandling = TypeNameHandling.All
+                    };
+                    var json = JsonConvert.SerializeObject(obj, settings);
+
+                    return JsonConvert.DeserializeObject<T>(json, settings);
+                }
+            }
         }
 
         /// <summary>
@@ -264,5 +284,21 @@ namespace Piranha
                 property.SetValue(instance, value);
             }
         }
+
+        public static bool IsSerializable(Type type)
+        {
+            if (_types.TryGetValue(type, out var serializable))
+            {
+                return serializable;
+            }
+            else
+            {
+                var attr = type.GetCustomAttribute<SerializableAttribute>();
+                _types[type] = attr != null;
+
+                return attr != null;
+            }
+        }
+
     }
 }

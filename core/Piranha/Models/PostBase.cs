@@ -16,6 +16,7 @@ namespace Piranha.Models
     /// <summary>
     /// Base class for post models.
     /// </summary>
+    [Serializable]
     public abstract class PostBase : RoutedContent, IBlockModel, IMeta
     {
         /// <summary>

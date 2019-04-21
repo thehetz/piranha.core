@@ -14,6 +14,7 @@ using Piranha.Models;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Image", Shorthand = "Image")]
+    [Serializable]
     public class ImageField : MediaFieldBase<ImageField>
     {
         /// <summary>

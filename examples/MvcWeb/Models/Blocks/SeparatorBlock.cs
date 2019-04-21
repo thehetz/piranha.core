@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -17,6 +17,7 @@ namespace MvcWeb.Models.Blocks
     /// Single column quote block.
     /// </summary>
     [BlockType(Name = "Separator", Category = "Content", Icon = "fas fa-pause")]
+    [Serializable]
     public class SeparatorBlock : Block
     {
     }

@@ -14,6 +14,7 @@ using Piranha.Models;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Video", Shorthand = "Video")]
+    [Serializable]
     public class VideoField : MediaFieldBase<VideoField>
     {
         /// <summary>

@@ -24,7 +24,6 @@ namespace Piranha.Cache
     public class DistributedCache : ICache
     {
         private readonly IDistributedCache _cache;
-        private readonly Dictionary<Type, bool> _types = new Dictionary<Type, bool>();
 
         /// <summary>
         /// Default constructor.
@@ -81,7 +80,7 @@ namespace Piranha.Cache
             var formatter = new BinaryFormatter();
             using (var stream = new MemoryStream())
             {
-                if (IsSerializable(obj.GetType()))
+                if (Utils.IsSerializable(obj.GetType()))
                 {
                     formatter.Serialize(stream, obj);
                     return stream.ToArray();
@@ -118,7 +117,7 @@ namespace Piranha.Cache
             var formatter = new BinaryFormatter();
             using (var stream = new MemoryStream(bytes))
             {
-                if (IsSerializable(typeof(T)))
+                if (Utils.IsSerializable(typeof(T)))
                 {
                     return (T)formatter.Deserialize(stream);
                 }
@@ -134,21 +133,6 @@ namespace Piranha.Cache
                     };
                     return JsonConvert.DeserializeObject<T>(json, settings);
                 }
-            }
-        }
-
-        private bool IsSerializable(Type type)
-        {
-            if (_types.TryGetValue(type, out var serializable))
-            {
-                return serializable;
-            }
-            else
-            {
-                var attr = type.GetCustomAttribute<SerializableAttribute>();
-                _types[type] = attr != null;
-
-                return attr != null;
             }
         }
     }

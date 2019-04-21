@@ -18,6 +18,7 @@ namespace Piranha.Extend.Fields
     /// Generic select field.
     /// </summary>
     [FieldType(Name = "Select", Shorthand = "Select")]
+    [Serializable]
     public class SelectField<T> : SelectFieldBase, IEquatable<SelectField<T>> where T : struct
     {
         /// <summary>

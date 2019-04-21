@@ -3,9 +3,9 @@
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
- * 
+ *
  * https://github.com/piranhacms/piranha.core
- * 
+ *
  */
 
 using System;
@@ -17,6 +17,7 @@ namespace Piranha.Extend.Fields
     /// Base class for simple single type fields.
     /// </summary>
     /// <typeparam name="T">The field type</typeparam>
+    [Serializable]
     public abstract class SimpleField<T> : Field, IEquatable<SimpleField<T>>
     {
         /// <summary>

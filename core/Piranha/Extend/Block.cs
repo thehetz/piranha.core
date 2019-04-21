@@ -8,14 +8,15 @@
  *
  */
 
-using Newtonsoft.Json;
 using System;
+using Newtonsoft.Json;
 
 namespace Piranha.Extend
 {
     /// <summary>
     /// Base class for blocks.
     /// </summary>
+    [Serializable]
     public abstract class Block
     {
         /// <summary>
