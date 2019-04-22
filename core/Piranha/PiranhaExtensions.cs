@@ -57,8 +57,8 @@ public static class PiranhaExtensions
     /// </summary>
     /// <param name="services">The current service collection</param>
     /// <returns>The updated service collection</returns>
-    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services)
+    public static IServiceCollection AddPiranhaSimpleCache(this IServiceCollection services, bool cloneOnGet = true)
     {
-        return services.AddSingleton<ICache, SimpleCache>();
+        return services.AddSingleton<ICache>(new SimpleCache(cloneOnGet));
     }
 }

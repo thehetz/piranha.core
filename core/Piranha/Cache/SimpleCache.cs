@@ -25,6 +25,16 @@ namespace Piranha.Cache
         /// The private cache collection.
         /// </summary>
         private readonly IDictionary<string, object> _cache = new Dictionary<string, object>();
+        private readonly bool _cloneOnGet = true;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="cloneOnGet">If objects should be cloned on get, default is true</param>
+        public SimpleCache(bool cloneOnGet = true)
+        {
+            _cloneOnGet = cloneOnGet;
+        }
 
         /// <summary>
         /// Gets the model with the specified key from cache.
@@ -38,7 +48,11 @@ namespace Piranha.Cache
 
             if (_cache.TryGetValue(key, out value))
             {
-                return Utils.DeepClone<T>((T)value);
+                if (_cloneOnGet)
+                {
+                    return Utils.DeepClone<T>((T)value);
+                }
+                return (T)value;
             }
             return default(T);
         }
